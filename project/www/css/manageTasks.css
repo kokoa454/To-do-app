@@ -101,4 +101,5 @@ h1 {
     background-repeat: no-repeat;
     background-size: cover;
     border: none;
+    background-color: inherit;
 }
