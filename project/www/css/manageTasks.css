@@ -94,13 +94,11 @@ h1 {
     position: fixed;
     right: 5dvh;
     bottom: 10dvh;
-    height: 7dvh;
-    width: 7dvh;
-    border-radius:50%;
-    background-color: rgb(255, 255, 255);
-}
-
-#taskclear img{
-    max-width: 100%;
-    height: auto;
+    height: 8dvh;
+    width: 10.5dvh;
+    background-image: url(../img/ok.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: none;
 }
