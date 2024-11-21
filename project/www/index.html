@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: content: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+        <title>Monaca Education ダイレクトプレビュー</title>
+        <script src="components/loader.js"></script>
+        <link rel="stylesheet" href="components/loader.css">
+        <script src="js/education.js" defer></script>
+        <script src="js/config.js" defer></script>
+        <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/style.css">
+        <link id="dynamicCss" rel="stylesheet" href="">
+        <link rel="stylesheet" href="css/all.css">
+    </head>
+    <body>
+        <header>
+            <div class="wrap">
+                <div id="character-wrap"></div>
+                <section id="character">
+                    <img src="./img/ta-toru.jpg" alt="character-icon" id="characterIcon">
+                </section>
+                <section id="levelBar">
+                    <p id="level">Lv.<span id="levelNum">0</span></p>
+                    <p id="levelTxt">To the next level: <span id="levelCnt">10000</span></p>
+                    <progress id="levelProgressbar" value="1000" max="10000"></progress>
+                </section>
+            </div>
+        </header>
+        <main></main>
+        <footer>
+            <a>
+                <i class="fa-solid fa-house" id="home"></i>
+            </a>
+            <a>
+                <i class="fa-solid fa-chart-simple" id="graph"></i>
+            </a>
+            <a>
+                <i class="fa-solid fa-book" id="archive"></i>
+            </a>
+            <a>
+                <i class="fa-solid fa-gear" id="settings"></i>
+            </a>
+        </footer>
+    </body>
+    <script src="js/main.js"></script>
+</html>

@@ -1,0 +1,35 @@
+/* --main-settings-- */
+main{
+    height: 76dvh;
+    width: 100dvw;
+    margin-top: 14dvh;
+    padding-top: 2dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+main button{
+    height: 15dvh;
+    width: 70dvw;
+    padding: 2dvh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    border-radius: 5px;
+}
+
+main button p{
+    font-size: 4dvh;
+}
+
+#reminderNum, #dailyNum, #weeklyNum, #monthlyNum{
+    position: absolute;
+    right: 2dvh;
+}
+
+/* --footer settings-- */
+#home{
+    color: black;
+}

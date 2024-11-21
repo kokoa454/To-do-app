@@ -1,0 +1,51 @@
+/* --main-settings-- */
+main{
+    height: 76dvh;
+    width: 100dvw;
+    margin-top: 14dvh;
+    padding-top: 2dvh;
+}
+
+h1 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 4dvh;
+    font-size: 4dvh;
+}
+
+#contentsBox{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.content{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.content h2{
+    margin-bottom: 3dvh;
+    border-bottom: 0.3dvh solid black;
+}
+
+#fontSize{
+    width: 80%;
+    margin-bottom: 1dvh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+input{
+    width: 80%;
+}
+
+/* --footer-settings-- */
+#settings{
+    color: black;
+}

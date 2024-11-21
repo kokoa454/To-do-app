@@ -1,0 +1,82 @@
+main{
+    height: 76dvh;
+    width: 100dvw;
+    margin-top: 14dvh;
+    padding-top: 2dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4dvh;
+}
+
+main input, main textarea{
+    border-radius: 5px;
+}
+
+#taskTitle{
+    height: 8dvh;
+    width: 70dvw;
+    padding: 0.5dvh;
+    font-size: 3dvh;
+    text-align: center;
+}
+
+#taskDesc{
+    height: 25dvh;
+    width: 70dvw;
+    padding: 0.5dvh;
+    font-size: 3dvh;
+    resize: none;
+}
+
+#taskDate{
+    height: 5dvh;
+    width: 70dvw;
+    padding: 0.5dvh;
+    font-size: 3dvh;
+    text-align: center;
+}    
+
+#taskTime{
+    height: 5dvh;
+    width: 70dvw;
+    padding: 0.5dvh;
+    font-size: 3dvh;
+    text-align: center;
+}
+
+#selectDow{
+    height: 5dvh;
+    width: 70dvw;
+    padding: 0.5dvh;
+    font-size: 3dvh;
+    text-align: center;
+    border-radius: 0.5dvh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: white;
+    border: 0.2dvh solid black;
+}
+
+#buttons{
+    margin-top: 5dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20dvw;
+    border-radius: 5px;
+}
+
+#buttons button{
+    width: 27dvw;
+    padding: 1dvh;
+    font-size: 2dvh;
+    text-align: center;
+}
+
+#back{
+    transform: scaleX(-1);
+}

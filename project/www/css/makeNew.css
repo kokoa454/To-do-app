@@ -1,0 +1,70 @@
+main{
+    height: 76dvh;
+    width: 100dvw;
+    margin-top: 14dvh;
+    padding-top: 2dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4dvh;
+}
+
+main input, main textarea{
+    border-radius: 5px;
+}
+
+#taskTitle{
+    height: 8dvh;
+    width: 70dvw;
+    padding: 0.5dvh;
+    font-size: 3dvh;
+    text-align: center;
+}
+
+#taskDesc{
+    height: 30dvh;
+    width: 70dvw;
+    padding: 0.5dvh;
+    font-size: 3dvh;
+    resize: none;
+    border: 0.3dvh solid black;
+}
+
+#selectDow{
+    background-color: white;
+    border: 0.3dvh solid black;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 0.5dvh;
+    align-items: center;
+}
+
+#day{
+    font-size: 2dvh;
+}
+
+#taskDate, #selectDow, #taskTime{
+    height: 5dvh;
+    width: 70dvw;
+    padding: 0.5dvh;
+    font-size: 3dvh;
+    text-align: center;
+}
+
+#buttons{
+    margin-top: 5dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20dvw;
+    border-radius: 5px;
+}
+
+#buttons button{
+    width: 27dvw;
+    padding: 1dvh;
+    font-size: 2dvh;
+    text-align: center;
+}
