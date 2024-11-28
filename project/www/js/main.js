@@ -1,4 +1,4 @@
-//page loading settings
+//page-load settings
 const pages = {
     home: {html: 'home.html', css: 'css/home.css'},
     graph: {html: '', css: ''},
@@ -50,7 +50,7 @@ function loadPage(pageKey){
 
                 document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewReminder'))
                 
-                showSampleReminder()
+                showReminder()
             }
 
             if(pageKey === 'dailyTasks'){
@@ -81,6 +81,7 @@ function loadPage(pageKey){
             }
 
             if(pageKey === 'makeNewReminder'){
+                document.querySelector('#okButton').addEventListener('click', () => addReminder())
                 document.querySelector('#okButton').addEventListener('click', () => loadPage('reminder'))
                 document.querySelector('#cancelButton').addEventListener('click', () => loadPage('reminder'))
             }
@@ -122,14 +123,39 @@ let exp = document.querySelector('#levelNum')
 
 let reminderCnt = document.querySelector('#reminderNum')
 
-function showSampleReminder(){
-    let taskTitle = document.querySelector('#taskTitle')
-    let taskDesc = document.querySelector('#taskDesc')
-    let taskDate = document.querySelector('#taskDate')
-    let taskTime = document.querySelector('#taskTime')
-    
-    taskTitle.textContent = "稲荷を食べる"
-    taskDesc.textContent = "寺田さん家の美味しい稲荷"
-    taskDate.value = "2024-11-27"
-    taskTime.value =  "11:11:11"
+//reminder settings
+function showReminder(){
+    ///write later
+}
+
+function addReminder(){
+    let taskTitle = document.querySelector('#taskTitle').value
+    let taskDesc = document.querySelector('#taskDesc').value
+    let taskDate = document.querySelector('#taskDate').value
+    let taskTime = document.querySelector('#taskTime').value
+
+    if(taskTitle.value === ""){
+        return
+    } else {
+        addReminderStorage(taskTitle, taskDesc, taskDate, taskTime);
+    }
+}
+
+function getReminderStorage(){
+    let list = localStorage.getItem("ReminderList")
+    if(list == null){
+        return []
+    } else {
+        return JSON.parse(list)
+    }
+}
+
+function addReminderStorage(taskTitle, taskDesc, taskDate, taskTime){
+    let list = getReminderStorage()
+    list.push(taskTitle, taskDesc, taskDate,taskTime)
+    setReminderStorage(list)
+}
+
+function setReminderStorage(list){
+    localStorage.setItem("ReminderList", JSON.stringify(list))
 }
