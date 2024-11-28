@@ -1,3 +1,4 @@
+//page loading settings
 const pages = {
     home: {html: 'home.html', css: 'css/home.css'},
     graph: {html: '', css: ''},
@@ -48,6 +49,8 @@ function loadPage(pageKey){
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewReminder'))
+                
+                showSampleReminder()
             }
 
             if(pageKey === 'dailyTasks'){
@@ -113,3 +116,20 @@ function loadPage(pageKey){
 }
 
 loadPage('home')
+
+//general settings
+let exp = document.querySelector('#levelNum')
+
+let reminderCnt = document.querySelector('#reminderNum')
+
+function showSampleReminder(){
+    let taskTitle = document.querySelector('#taskTitle')
+    let taskDesc = document.querySelector('#taskDesc')
+    let taskDate = document.querySelector('#taskDate')
+    let taskTime = document.querySelector('#taskTime')
+    
+    taskTitle.textContent = "稲荷を食べる"
+    taskDesc.textContent = "寺田さん家の美味しい稲荷"
+    taskDate.value = "2024-11-27"
+    taskTime.value =  "11:11:11"
+}
