@@ -120,12 +120,29 @@ loadPage('home')
 
 //general settings
 let exp = document.querySelector('#levelNum')
-
 let reminderCnt = document.querySelector('#reminderNum')
 
 //reminder settings
 function showReminder(){
-    ///write later
+    let list = getReminderStorage()
+    let contents = document.querySelector("#contents")
+    contents.innerHTML = ""
+
+    list.forEach(reminder => {
+        let contentBox = document.createElement("div")
+        contentBox.classList.add("contentsBox")
+        contentBox.innerHTML = `
+            <input type="checkbox" name="#">
+            <button class="content">
+                <p class="taskTitle">${reminder.title}</p>
+                <p class="taskDesc">${reminder.description}</p>
+                <input class="taskDate" type="date" value="${reminder.date}" readonly>
+                <input class="taskTime" type="time" value="${reminder.time}" readonly>
+            </button>
+        `
+
+        contents.appendChild(contentBox)
+    });
 }
 
 function addReminder(){
@@ -134,7 +151,8 @@ function addReminder(){
     let taskDate = document.querySelector('#taskDate').value
     let taskTime = document.querySelector('#taskTime').value
 
-    if(taskTitle.value === ""){
+    if(taskTitle === ""){
+        alert("タイトルを入力してください")
         return
     } else {
         addReminderStorage(taskTitle, taskDesc, taskDate, taskTime);
@@ -152,7 +170,12 @@ function getReminderStorage(){
 
 function addReminderStorage(taskTitle, taskDesc, taskDate, taskTime){
     let list = getReminderStorage()
-    list.push(taskTitle, taskDesc, taskDate,taskTime)
+    list.push({
+        title: taskTitle,
+        description: taskDesc,
+        date: taskDate,
+        time: taskTime
+    })
     setReminderStorage(list)
 }
 
