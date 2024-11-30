@@ -22,16 +22,17 @@ const pages = {
     makeNewDailyTask: {html: 'makeNewDailyTask.html', css: 'css/makeNew.css'},
     makeNewWeeklyTask: {html: 'makeNewWeeklyTask.html', css: 'css/makeNew.css'},
     makeNewMonthlyTask: {html: 'makeNewMonthlyTask.html', css: 'css/makeNew.css'},
+
+    editReminder: {html: 'editReminder.html', css: 'css/editTask.css'},
+    editDailyTask: {html: 'editDailyTask.html', css: 'css/editTask.css'},
+    editWeeklyTask: {html: 'editWeeklyTask.html', css: 'css/editTask.css'},
+    editMonthlyTask: {html: 'editMonthlyTask.html', css: 'css/editTask.css'}
 }
 
 const cssLink = document.querySelector('#dynamicCss')
 
 function loadPage(pageKey){
     const page = pages[pageKey]
-    
-    if(!page){
-        return;
-    }
 
     fetch(page.html)
         .then(response => response.text())
@@ -138,18 +139,19 @@ function showTasks(listName){
     contents.innerHTML = ""
 
     if(listName === reminderList){
-        taskList.forEach(reminder => {
+        taskList.forEach((reminder, index) => {
             let contentBox = document.createElement("div")
             contentBox.classList.add("contentsBox")
             contentBox.innerHTML = `
                 <input type="checkbox" name="#">
-                <button class="content">
+                <button class="content" data-index="${index}">
                     <p class="taskTitle">${reminder.title}</p>
                     <p class="taskDesc">${reminder.description}</p>
                     <input class="taskDate" type="date" value="${reminder.date}" readonly>
                     <input class="taskTime" type="time" value="${reminder.time}" readonly>
                 </button>
             `
+            contentBox.querySelector('.content').addEventListener('click', () => editTask(listName, index));
     
             contents.appendChild(contentBox)
         });
@@ -261,6 +263,49 @@ function addTask(listName){
             loadPage('monthlyTasks')
         }
     }
+}
+
+function editTask(listName, index){
+    let taskList = getStorage(listName)
+    let task = taskList[index]
+
+    if(listName === reminderList){
+        loadPage('editReminder')
+
+        setTimeout(() => {
+            const taskTitle = document.querySelector('#taskTitle');
+            const taskDesc = document.querySelector('#taskDesc');
+            const taskDate = document.querySelector('#taskDate');
+            const taskTime = document.querySelector('#taskTime');
+
+            taskTitle.value = task.title
+            taskDesc.value = task.description
+            taskDate.value = task.date
+            taskTime.value = task.time
+        }, 10)
+    }/* else if(listName === dailyList){
+        let taskTitle = document.querySelector('#taskTitle').value
+        let taskDesc = document.querySelector('#taskDesc').value
+        let taskDate = null
+        let taskDOW = null
+        let taskTime = document.querySelector('#taskTime').value
+
+    } else if(listName === weeklyList){
+        let taskTitle = document.querySelector('#taskTitle').value
+        let taskDesc = document.querySelector('#taskDesc').value
+        let taskDate = null
+        let taskDOW = document.querySelector('#taskDOW').value
+        let taskTime = document.querySelector('#taskTime').value
+
+    } else if(listName === monthlyList){
+        let taskTitle = document.querySelector('#taskTitle').value
+        let taskDesc = document.querySelector('#taskDesc').value
+        let taskDate = document.querySelector('#taskDate').value
+        let taskDOW = null
+        let taskTime = document.querySelector('#taskTime').value
+    
+    }*/
+    
 }
 
 //local-storage settings
