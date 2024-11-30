@@ -1,3 +1,8 @@
+//general settings
+let exp = document.querySelector('#levelNum')
+let reminderCnt = document.querySelector('#reminderNum')
+const reminderList = "ReminderList"
+
 //page-load settings
 const pages = {
     home: {html: 'home.html', css: 'css/home.css'},
@@ -50,7 +55,7 @@ function loadPage(pageKey){
 
                 document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewReminder'))
                 
-                showReminder()
+                showTasks(reminderList)
             }
 
             if(pageKey === 'dailyTasks'){
@@ -81,8 +86,7 @@ function loadPage(pageKey){
             }
 
             if(pageKey === 'makeNewReminder'){
-                document.querySelector('#okButton').addEventListener('click', () => addReminder())
-                document.querySelector('#okButton').addEventListener('click', () => loadPage('reminder'))
+                document.querySelector('#okButton').addEventListener('click', () => addTask(reminderList))
                 document.querySelector('#cancelButton').addEventListener('click', () => loadPage('reminder'))
             }
 
@@ -118,67 +122,68 @@ function loadPage(pageKey){
 
 loadPage('home')
 
-//general settings
-let exp = document.querySelector('#levelNum')
-let reminderCnt = document.querySelector('#reminderNum')
-
 //reminder settings
-function showReminder(){
-    let list = getReminderStorage()
+function showTasks(listName){
+    let taskList = getStorage(listName)
     let contents = document.querySelector("#contents")
     contents.innerHTML = ""
 
-    list.forEach(reminder => {
-        let contentBox = document.createElement("div")
-        contentBox.classList.add("contentsBox")
-        contentBox.innerHTML = `
-            <input type="checkbox" name="#">
-            <button class="content">
-                <p class="taskTitle">${reminder.title}</p>
-                <p class="taskDesc">${reminder.description}</p>
-                <input class="taskDate" type="date" value="${reminder.date}" readonly>
-                <input class="taskTime" type="time" value="${reminder.time}" readonly>
-            </button>
-        `
-
-        contents.appendChild(contentBox)
-    });
-}
-
-function addReminder(){
-    let taskTitle = document.querySelector('#taskTitle').value
-    let taskDesc = document.querySelector('#taskDesc').value
-    let taskDate = document.querySelector('#taskDate').value
-    let taskTime = document.querySelector('#taskTime').value
-
-    if(taskTitle === ""){
-        alert("タイトルを入力してください")
-        return
-    } else {
-        addReminderStorage(taskTitle, taskDesc, taskDate, taskTime);
+    if(listName === reminderList){
+        taskList.forEach(reminder => {
+            let contentBox = document.createElement("div")
+            contentBox.classList.add("contentsBox")
+            contentBox.innerHTML = `
+                <input type="checkbox" name="#">
+                <button class="content">
+                    <p class="taskTitle">${reminder.title}</p>
+                    <p class="taskDesc">${reminder.description}</p>
+                    <input class="taskDate" type="date" value="${reminder.date}" readonly>
+                    <input class="taskTime" type="time" value="${reminder.time}" readonly>
+                </button>
+            `
+    
+            contents.appendChild(contentBox)
+        });
     }
 }
 
-function getReminderStorage(){
-    let list = localStorage.getItem("ReminderList")
-    if(list == null){
+function addTask(listName){
+    if(listName == reminderList){
+        let taskTitle = document.querySelector('#taskTitle').value
+        let taskDesc = document.querySelector('#taskDesc').value
+        let taskDate = document.querySelector('#taskDate').value
+        let taskTime = document.querySelector('#taskTime').value
+
+        if(taskTitle === ""){
+            alert("タイトルを入力してください")
+            return
+        } else {
+            addStorage(listName, taskTitle, taskDesc, taskDate, taskTime);
+            loadPage('reminder')
+        }
+    }
+}
+
+function getStorage(listName){
+    let storageList = localStorage.getItem(listName)
+    if(storageList == null){
         return []
     } else {
-        return JSON.parse(list)
+        return JSON.parse(storageList)
     }
 }
 
-function addReminderStorage(taskTitle, taskDesc, taskDate, taskTime){
-    let list = getReminderStorage()
-    list.push({
+function addStorage(listName, taskTitle, taskDesc, taskDate, taskTime){
+    let taskList = getStorage(listName)
+    taskList.push({
         title: taskTitle,
         description: taskDesc,
         date: taskDate,
         time: taskTime
     })
-    setReminderStorage(list)
+    setStorage(listName, taskList)
 }
 
-function setReminderStorage(list){
-    localStorage.setItem("ReminderList", JSON.stringify(list))
+function setStorage(listName, taskList){
+    localStorage.setItem(listName, JSON.stringify(taskList))
 }
