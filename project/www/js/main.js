@@ -2,6 +2,9 @@
 let exp = document.querySelector('#levelNum')
 let reminderCnt = document.querySelector('#reminderNum')
 const reminderList = "ReminderList"
+const dailyList = "DailyList"
+const weeklyList = "WeeklyList"
+const monthlyList = "MonthlyList"
 
 //page-load settings
 const pages = {
@@ -65,6 +68,8 @@ function loadPage(pageKey){
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewDailyTask'))
+
+                showTasks(dailyList)
             }
 
             if(pageKey === 'weeklyTasks'){
@@ -74,6 +79,8 @@ function loadPage(pageKey){
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewWeeklyTask'))
+
+                showTasks(weeklyList)
             }
 
             if(pageKey === 'monthlyTasks'){
@@ -83,6 +90,8 @@ function loadPage(pageKey){
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewMonthlyTask'))
+
+                showTasks(monthlyList)
             }
 
             if(pageKey === 'makeNewReminder'){
@@ -91,17 +100,17 @@ function loadPage(pageKey){
             }
 
             if(pageKey === 'makeNewDailyTask'){
-                document.querySelector('#okButton').addEventListener('click', () => loadPage('dailyTasks'))
+                document.querySelector('#okButton').addEventListener('click', () => addTask(dailyList))
                 document.querySelector('#cancelButton').addEventListener('click', () => loadPage('dailyTasks'))
             }
 
             if(pageKey === 'makeNewWeeklyTask'){
-                document.querySelector('#okButton').addEventListener('click', () => loadPage('weeklyTasks'))
+                document.querySelector('#okButton').addEventListener('click', () => addTask(weeklyList))
                 document.querySelector('#cancelButton').addEventListener('click', () => loadPage('weeklyTasks'))
             }
 
             if(pageKey === 'makeNewMonthlyTask'){
-                document.querySelector('#okButton').addEventListener('click', () => loadPage('monthlyTasks'))
+                document.querySelector('#okButton').addEventListener('click', () => addTask(monthlyList))
                 document.querySelector('#cancelButton').addEventListener('click', () => loadPage('monthlyTasks'))
             }
 
@@ -122,7 +131,7 @@ function loadPage(pageKey){
 
 loadPage('home')
 
-//reminder settings
+//tasks management settings
 function showTasks(listName){
     let taskList = getStorage(listName)
     let contents = document.querySelector("#contents")
@@ -144,6 +153,53 @@ function showTasks(listName){
     
             contents.appendChild(contentBox)
         });
+    } else if(listName === dailyList){
+        taskList.forEach(dailyTask => {
+            let contentBox = document.createElement("div")
+            contentBox.classList.add("contentsBox")
+            contentBox.innerHTML = `
+                <input type="checkbox" name="#">
+                <button class="content">
+                    <p class="taskTitle">${dailyTask.title}</p>
+                    <p class="taskDesc">${dailyTask.description}</p>
+                    <input class="taskTime" type="time" value="${dailyTask.time}" readonly>
+                </button>
+            `
+    
+            contents.appendChild(contentBox)
+        });
+    } else if(listName === weeklyList){
+        taskList.forEach(weeklyTask => {
+            let contentBox = document.createElement("div")
+            contentBox.classList.add("contentsBox")
+            contentBox.innerHTML = `
+                <input type="checkbox" name="#">
+                <button class="content">
+                    <p class="taskTitle">${weeklyTask.title}</p>
+                    <p class="taskDesc">${weeklyTask.description}</p>
+                    <div class="taskDow"><p>${weeklyTask.DOW}</p></div>
+                    <input class="taskTime" type="time" value="${weeklyTask.time}" readonly>
+                </button>
+            `
+    
+            contents.appendChild(contentBox)
+        });
+    } else if(listName === monthlyList){
+        taskList.forEach(monthlyTask => {
+            let contentBox = document.createElement("div")
+            contentBox.classList.add("contentsBox")
+            contentBox.innerHTML = `
+                <input type="checkbox" name="#">
+                <button class="content">
+                    <p class="taskTitle">${monthlyTask.title}</p>
+                    <p class="taskDesc">${monthlyTask.description}</p>
+                    <input class="taskDate" type="date" value="${monthlyTask.date}" readonly>
+                    <input class="taskTime" type="time" value="${monthlyTask.time}" readonly>
+                </button>
+            `
+    
+            contents.appendChild(contentBox)
+        });
     }
 }
 
@@ -152,18 +208,62 @@ function addTask(listName){
         let taskTitle = document.querySelector('#taskTitle').value
         let taskDesc = document.querySelector('#taskDesc').value
         let taskDate = document.querySelector('#taskDate').value
+        let taskDOW = null
         let taskTime = document.querySelector('#taskTime').value
 
         if(taskTitle === ""){
             alert("タイトルを入力してください")
             return
         } else {
-            addStorage(listName, taskTitle, taskDesc, taskDate, taskTime);
+            addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime);
             loadPage('reminder')
+        }
+    } else if(listName === dailyList){
+        let taskTitle = document.querySelector('#taskTitle').value
+        let taskDesc = document.querySelector('#taskDesc').value
+        let taskDate = null
+        let taskDOW = null
+        let taskTime = document.querySelector('#taskTime').value
+
+        if(taskTitle === ""){
+            alert("タイトルを入力してください")
+            return
+        } else {
+            addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime);
+            loadPage('dailyTasks')
+        }
+    } else if(listName === weeklyList){
+        let taskTitle = document.querySelector('#taskTitle').value
+        let taskDesc = document.querySelector('#taskDesc').value
+        let taskDate = null
+        let taskDOW = document.querySelector('#taskDOW').value
+        let taskTime = document.querySelector('#taskTime').value
+
+        if(taskTitle === ""){
+            alert("タイトルを入力してください")
+            return
+        } else {
+            addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime);
+            loadPage('weeklyTasks')
+        }
+    } else if(listName === monthlyList){
+        let taskTitle = document.querySelector('#taskTitle').value
+        let taskDesc = document.querySelector('#taskDesc').value
+        let taskDate = document.querySelector('#taskDate').value
+        let taskDOW = null
+        let taskTime = document.querySelector('#taskTime').value
+
+        if(taskTitle === ""){
+            alert("タイトルを入力してください")
+            return
+        } else {
+            addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime);
+            loadPage('monthlyTasks')
         }
     }
 }
 
+//local-storage settings
 function getStorage(listName){
     let storageList = localStorage.getItem(listName)
     if(storageList == null){
@@ -173,12 +273,13 @@ function getStorage(listName){
     }
 }
 
-function addStorage(listName, taskTitle, taskDesc, taskDate, taskTime){
+function addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime){
     let taskList = getStorage(listName)
     taskList.push({
         title: taskTitle,
         description: taskDesc,
         date: taskDate,
+        DOW: taskDOW,
         time: taskTime
     })
     setStorage(listName, taskList)
