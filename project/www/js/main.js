@@ -276,7 +276,6 @@ function editTask(listName, index){
             let taskTitle = document.querySelector('#taskTitle');
             let taskDesc = document.querySelector('#taskDesc');
             let taskDate = document.querySelector('#taskDate');
-            let taskDOW = null
             let taskTime = document.querySelector('#taskTime');
 
             taskTitle.value = task.title
@@ -285,7 +284,7 @@ function editTask(listName, index){
             taskTime.value = task.time
 
             document.querySelector('#okButton').addEventListener('click', () => {
-                if(taskTitle === ""){
+                if(taskTitle.value === ""){
                     alert("タイトルを入力してください")
                     return
                 } else {
@@ -298,6 +297,12 @@ function editTask(listName, index){
                     setStorage(listName, taskList)
                     loadPage('reminder')
                 }
+            })
+
+            document.querySelector('#deleteButton').addEventListener('click', () => {
+                taskList.splice(index, 1)
+                setStorage(listName, taskList)
+                loadPage('reminder')
             })
         }, 10)
     }/* else if(listName === dailyList){
