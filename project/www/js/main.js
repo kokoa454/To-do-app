@@ -273,37 +273,39 @@ function editTask(listName, index){
         loadPage('editReminder')
 
         setTimeout(() => {
-            const taskTitle = document.querySelector('#taskTitle');
-            const taskDesc = document.querySelector('#taskDesc');
-            const taskDate = document.querySelector('#taskDate');
-            const taskTime = document.querySelector('#taskTime');
+            let taskTitle = document.querySelector('#taskTitle');
+            let taskDesc = document.querySelector('#taskDesc');
+            let taskDate = document.querySelector('#taskDate');
+            let taskDOW = null
+            let taskTime = document.querySelector('#taskTime');
 
             taskTitle.value = task.title
             taskDesc.value = task.description
             taskDate.value = task.date
             taskTime.value = task.time
+
+            document.querySelector('#okButton').addEventListener('click', () => {
+                if(taskTitle === ""){
+                    alert("タイトルを入力してください")
+                    return
+                } else {
+                    task.title = taskTitle.value
+                    task.description = taskDesc.value
+                    task.date = taskDate.value
+                    task.DOW = null
+                    task.time = taskTime.value
+
+                    setStorage(listName, taskList)
+                    loadPage('reminder')
+                }
+            })
         }, 10)
     }/* else if(listName === dailyList){
-        let taskTitle = document.querySelector('#taskTitle').value
-        let taskDesc = document.querySelector('#taskDesc').value
-        let taskDate = null
-        let taskDOW = null
-        let taskTime = document.querySelector('#taskTime').value
 
     } else if(listName === weeklyList){
-        let taskTitle = document.querySelector('#taskTitle').value
-        let taskDesc = document.querySelector('#taskDesc').value
-        let taskDate = null
-        let taskDOW = document.querySelector('#taskDOW').value
-        let taskTime = document.querySelector('#taskTime').value
 
     } else if(listName === monthlyList){
-        let taskTitle = document.querySelector('#taskTitle').value
-        let taskDesc = document.querySelector('#taskDesc').value
-        let taskDate = document.querySelector('#taskDate').value
-        let taskDOW = null
-        let taskTime = document.querySelector('#taskTime').value
-    
+
     }*/
     
 }
