@@ -167,7 +167,8 @@ function showTasks(listName){
                     <input class="taskTime" type="time" value="${dailyTask.time}" readonly>
                 </button>
             `
-    
+            contentBox.querySelector('.content').addEventListener('click', () => editTask(listName, index));
+
             contents.appendChild(contentBox)
         });
     } else if(listName === weeklyList){
@@ -183,7 +184,8 @@ function showTasks(listName){
                     <input class="taskTime" type="time" value="${weeklyTask.time}" readonly>
                 </button>
             `
-    
+            contentBox.querySelector('.content').addEventListener('click', () => editTask(listName, index));
+
             contents.appendChild(contentBox)
         });
     } else if(listName === monthlyList){
@@ -199,7 +201,8 @@ function showTasks(listName){
                     <input class="taskTime" type="time" value="${monthlyTask.time}" readonly>
                 </button>
             `
-    
+            contentBox.querySelector('.content').addEventListener('click', () => editTask(listName, index));
+
             contents.appendChild(contentBox)
         });
     }
@@ -273,10 +276,10 @@ function editTask(listName, index){
         loadPage('editReminder')
 
         setTimeout(() => {
-            let taskTitle = document.querySelector('#taskTitle');
-            let taskDesc = document.querySelector('#taskDesc');
-            let taskDate = document.querySelector('#taskDate');
-            let taskTime = document.querySelector('#taskTime');
+            let taskTitle = document.querySelector('#taskTitle')
+            let taskDesc = document.querySelector('#taskDesc')
+            let taskDate = document.querySelector('#taskDate')
+            let taskTime = document.querySelector('#taskTime')
 
             taskTitle.value = task.title
             taskDesc.value = task.description
@@ -304,7 +307,7 @@ function editTask(listName, index){
                 setStorage(listName, taskList)
                 loadPage('reminder')
             })
-        }, 10)
+        }, 20)
     }/* else if(listName === dailyList){
 
     } else if(listName === weeklyList){
