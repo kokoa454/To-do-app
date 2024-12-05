@@ -32,7 +32,7 @@ const pages = {
 const cssLink = document.querySelector('#dynamicCss')
 
 function loadPage(pageKey){
-    const page = pages[pageKey]
+    let page = pages[pageKey]
 
     fetch(page.html)
         .then(response => response.text())
@@ -156,12 +156,12 @@ function showTasks(listName){
             contents.appendChild(contentBox)
         });
     } else if(listName === dailyList){
-        taskList.forEach(dailyTask => {
+        taskList.forEach((dailyTask, index) => {
             let contentBox = document.createElement("div")
             contentBox.classList.add("contentsBox")
             contentBox.innerHTML = `
                 <input type="checkbox" name="#">
-                <button class="content">
+                <button class="content" data-index="${index}">
                     <p class="taskTitle">${dailyTask.title}</p>
                     <p class="taskDesc">${dailyTask.description}</p>
                     <input class="taskTime" type="time" value="${dailyTask.time}" readonly>
@@ -172,12 +172,12 @@ function showTasks(listName){
             contents.appendChild(contentBox)
         });
     } else if(listName === weeklyList){
-        taskList.forEach(weeklyTask => {
+        taskList.forEach((weeklyTask, index) => {
             let contentBox = document.createElement("div")
             contentBox.classList.add("contentsBox")
             contentBox.innerHTML = `
                 <input type="checkbox" name="#">
-                <button class="content">
+                <button class="content" data-index="${index}">
                     <p class="taskTitle">${weeklyTask.title}</p>
                     <p class="taskDesc">${weeklyTask.description}</p>
                     <div class="taskDow"><p>${weeklyTask.DOW}</p></div>
@@ -189,12 +189,12 @@ function showTasks(listName){
             contents.appendChild(contentBox)
         });
     } else if(listName === monthlyList){
-        taskList.forEach(monthlyTask => {
+        taskList.forEach((monthlyTask,index) => {
             let contentBox = document.createElement("div")
             contentBox.classList.add("contentsBox")
             contentBox.innerHTML = `
                 <input type="checkbox" name="#">
-                <button class="content">
+                <button class="content" data-index="${index}">
                     <p class="taskTitle">${monthlyTask.title}</p>
                     <p class="taskDesc">${monthlyTask.description}</p>
                     <input class="taskDate" type="date" value="${monthlyTask.date}" readonly>
@@ -241,7 +241,30 @@ function addTask(listName){
         let taskTitle = document.querySelector('#taskTitle').value
         let taskDesc = document.querySelector('#taskDesc').value
         let taskDate = null
-        let taskDOW = document.querySelector('#taskDOW').value
+        let taskDOW
+        switch(document.querySelector('#taskDOW').value){
+            case 'monday':
+                taskDOW = '月'
+                break
+            case 'tuesday':
+                taskDOW = '火'
+                break
+            case 'wednesday':
+                taskDOW = '水'
+                break
+            case 'thursday':
+                taskDOW = '木'
+                break
+            case 'friday':
+                taskDOW = '金'
+                break
+            case 'saturday':
+                taskDOW = '土'
+                break
+            case 'sunday':
+                taskDOW = '日'
+                break
+        }
         let taskTime = document.querySelector('#taskTime').value
 
         if(taskTitle === ""){
@@ -308,14 +331,112 @@ function editTask(listName, index){
                 loadPage('reminder')
             })
         }, 20)
-    }/* else if(listName === dailyList){
+    } else if(listName === dailyList){
+        loadPage('editDailyTask')
 
+        setTimeout(() => {
+            let taskTitle = document.querySelector('#taskTitle')
+            let taskDesc = document.querySelector('#taskDesc')
+            let taskTime = document.querySelector('#taskTime')
+
+            taskTitle.value = task.title
+            taskDesc.value = task.description
+            taskTime.value = task.time
+
+            document.querySelector('#okButton').addEventListener('click', () => {
+                if(taskTitle.value === ""){
+                    alert("タイトルを入力してください")
+                    return
+                } else {
+                    task.title = taskTitle.value
+                    task.description = taskDesc.value
+                    task.date = null
+                    task.DOW = null
+                    task.time = taskTime.value
+
+                    setStorage(listName, taskList)
+                    loadPage('dailyTasks')
+                }
+            })
+
+            document.querySelector('#deleteButton').addEventListener('click', () => {
+                taskList.splice(index, 1)
+                setStorage(listName, taskList)
+                loadPage('dailyTasks')
+            })
+        }, 20)
     } else if(listName === weeklyList){
+        loadPage('editWeeklyTask')
+        setTimeout(() => {
+            let taskTitle = document.querySelector('#taskTitle')
+            let taskDesc = document.querySelector('#taskDesc')
+            let taskDOW = document.querySelector('#taskDOW')
+            let taskTime = document.querySelector('#taskTime')
 
+            taskTitle.value = task.title
+            taskDesc.value = task.description
+            taskDOW.value = task.DOW
+            taskTime.value = task.time
+
+            document.querySelector('#okButton').addEventListener('click', () => {
+                if(taskTitle.value === ""){
+                    alert("タイトルを入力してください")
+                    return
+                } else {
+                    task.title = taskTitle.value
+                    task.description = taskDesc.value
+                    task.date = null
+                    task.DOW = taskDOW.value
+                    task.time = taskTime.value
+
+                    setStorage(listName, taskList)
+                    loadPage('weeklyTasks')
+                }
+            })
+
+            document.querySelector('#deleteButton').addEventListener('click', () => {
+                taskList.splice(index, 1)
+                setStorage(listName, taskList)
+                loadPage('weeklyTasks')
+            })
+        }, 20)
     } else if(listName === monthlyList){
+        loadPage('editMonthlyTask')
 
-    }*/
-    
+        setTimeout(() => {
+            let taskTitle = document.querySelector('#taskTitle')
+            let taskDesc = document.querySelector('#taskDesc')
+            let taskDate = document.querySelector('#taskDate')
+            let taskTime = document.querySelector('#taskTime')
+
+            taskTitle.value = task.title
+            taskDesc.value = task.description
+            taskDate.value = task.date
+            taskTime.value = task.time
+
+            document.querySelector('#okButton').addEventListener('click', () => {
+                if(taskTitle.value === ""){
+                    alert("タイトルを入力してください")
+                    return
+                } else {
+                    task.title = taskTitle.value
+                    task.description = taskDesc.value
+                    task.date = taskDate.value
+                    task.DOW = null
+                    task.time = taskTime.value
+
+                    setStorage(listName, taskList)
+                    loadPage('monthlyTasks')
+                }
+            })
+
+            document.querySelector('#deleteButton').addEventListener('click', () => {
+                taskList.splice(index, 1)
+                setStorage(listName, taskList)
+                loadPage('monthlyTasks')
+            })
+        }, 20)
+    }
 }
 
 //local-storage settings
