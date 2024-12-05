@@ -330,7 +330,7 @@ function editTask(listName, index){
                 setStorage(listName, taskList)
                 loadPage('reminder')
             })
-        }, 20)
+        }, 50)
     } else if(listName === dailyList){
         loadPage('editDailyTask')
 
@@ -364,7 +364,7 @@ function editTask(listName, index){
                 setStorage(listName, taskList)
                 loadPage('dailyTasks')
             })
-        }, 20)
+        }, 50)
     } else if(listName === weeklyList){
         loadPage('editWeeklyTask')
         setTimeout(() => {
@@ -375,7 +375,29 @@ function editTask(listName, index){
 
             taskTitle.value = task.title
             taskDesc.value = task.description
-            taskDOW.value = task.DOW
+            switch(task.DOW){
+                case '月':
+                    taskDOW.value = 'monday'
+                    break
+                case '火':
+                    taskDOW.value = 'tuesday'
+                    break
+                case '水':
+                    taskDOW.value = 'wednesday'
+                    break
+                case '木':
+                    taskDOW.value = 'thursday'
+                    break
+                case '金':
+                    taskDOW.value = 'friday'
+                    break
+                case '土':
+                    taskDOW.value = 'saturday'
+                    break
+                case '日':
+                    taskDOW.value = 'sunday'
+                    break
+            }
             taskTime.value = task.time
 
             document.querySelector('#okButton').addEventListener('click', () => {
@@ -386,7 +408,29 @@ function editTask(listName, index){
                     task.title = taskTitle.value
                     task.description = taskDesc.value
                     task.date = null
-                    task.DOW = taskDOW.value
+                    switch(taskDOW.value){
+                        case 'monday':
+                            task.DOW = '月'
+                            break
+                        case 'tuesday':
+                            task.DOW = '火'
+                            break
+                        case 'wednesday':
+                            task.DOW = '水'
+                            break
+                        case 'thursday':
+                            task.DOW = '木'
+                            break
+                        case 'friday':
+                            task.DOW = '金'
+                            break
+                        case 'saturday':
+                            task.DOW = '土'
+                            break
+                        case 'sunday':
+                            task.DOW = '日'
+                            break
+                    }
                     task.time = taskTime.value
 
                     setStorage(listName, taskList)
@@ -399,7 +443,7 @@ function editTask(listName, index){
                 setStorage(listName, taskList)
                 loadPage('weeklyTasks')
             })
-        }, 20)
+        }, 50)
     } else if(listName === monthlyList){
         loadPage('editMonthlyTask')
 
@@ -435,7 +479,7 @@ function editTask(listName, index){
                 setStorage(listName, taskList)
                 loadPage('monthlyTasks')
             })
-        }, 20)
+        }, 50)
     }
 }
 
