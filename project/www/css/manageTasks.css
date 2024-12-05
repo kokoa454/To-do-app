@@ -62,30 +62,33 @@ h1 {
 }
 
 .taskTime{
+    height: 2dvh;
     font-size: 1.5dvh;
     position: absolute;
     bottom: 2dvh;
-    right: 2svh;
+    right: 2dvh;
     pointer-events: none;
 }
 
 .taskDate{
+    height: 2dvh;
     font-size: 1.5dvh;
     position: absolute;
     bottom: 2dvh;
-    right: 10dvh;
+    right: 20dvw;
     pointer-events: none;
 }
 
 .taskDow{
-    width: 3em;
+    height: 2dvh;
+    width: 5dvh;
     display: block;
     border-radius: 1dvh;
     border: 0.01em solid #000;
     font-size: 1.9dvh;
     position: absolute;
     bottom: 2dvh;
-    right: 8svh;
+    right: 20dvw;
     pointer-events: none;
 }
 
