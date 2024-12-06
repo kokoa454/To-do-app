@@ -79,16 +79,16 @@ h1 {
     pointer-events: none;
 }
 
-.taskDow{
-    height: 2dvh;
+.taskDOW{
+    height: 2.2dvh;
     width: 5dvh;
-    display: block;
-    border-radius: 1dvh;
+    display: absolute;
+    border-radius: 0.3dvh;
     border: 0.01em solid #000;
     font-size: 1.9dvh;
     position: absolute;
     bottom: 2dvh;
-    right: 20dvw;
+    right: 21.5dvw;
     pointer-events: none;
 }
 

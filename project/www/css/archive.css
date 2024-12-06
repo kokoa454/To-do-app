@@ -13,18 +13,22 @@ h1 {
     margin-bottom: 4dvh;
 }
 
-#contentsBox{
+#contents{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2dvh;
+}
+
+.contentsBox{
     margin-bottom: 2dvh;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
-#contentsBox input[type=checkbox]{
-    margin-right: 4dvh;
-    transform: scale(1.5) ;
-}
-
-#content{
+.content{
     height: 15dvh;
     width: 70dvw;
     background-color: rgb(255, 255, 255);
@@ -35,21 +39,44 @@ h1 {
     border-radius: 5px;
 }
 
-#taskTitle{
+.taskTitle{
     font-size: 3dvh;
     margin-bottom: 1dvh;
 }
 
-#taskDesc{
+.taskDesc{
     font-size: 2dvh;
     margin-bottom: 0.5dvh;
 }
 
-#taskTime{
+.taskTime{
+    height: 2dvh;
     font-size: 1.5dvh;
     position: absolute;
     bottom: 2dvh;
     right: 2dvh;
+    pointer-events: none;
+}
+
+.taskDate{
+    height: 2dvh;
+    font-size: 1.5dvh;
+    position: absolute;
+    bottom: 2dvh;
+    right: 17.6dvh;
+    pointer-events: none;
+}
+
+.taskDOW{
+    height: 2.2dvh;
+    width: 5dvh;
+    display: absolute;
+    border-radius: 0.3dvh;
+    border: 0.01em solid #000;
+    font-size: 1.9dvh;
+    position: absolute;
+    bottom: 2dvh;
+    right: 21.5dvw;
     pointer-events: none;
 }
 

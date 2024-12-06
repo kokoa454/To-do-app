@@ -119,6 +119,7 @@ function loadPage(pageKey){
                 document.querySelector('#home').addEventListener('click', () => loadPage('home'))
                 document.querySelector('#graph').addEventListener('click', () => loadPage('graph'))
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
+                showArchive()
             }
 
             if(pageKey === 'settings'){
@@ -132,7 +133,7 @@ function loadPage(pageKey){
 
 loadPage('home')
 
-//tasks management settings
+//basic task management settings
 function showTasks(listName){
     let taskList = getStorage(listName)
     let contents = document.querySelector("#contents")
@@ -180,7 +181,7 @@ function showTasks(listName){
                 <button class="content" data-index="${index}">
                     <p class="taskTitle">${weeklyTask.title}</p>
                     <p class="taskDesc">${weeklyTask.description}</p>
-                    <div class="taskDow"><p>${weeklyTask.DOW}</p></div>
+                    <div class="taskDOW"><p>${weeklyTask.DOW}</p></div>
                     <input class="taskTime" type="time" value="${weeklyTask.time}" readonly>
                 </button>
             `
@@ -482,6 +483,39 @@ function editTask(listName, index){
         }, 50)
     }
 }
+
+//archive settings
+function showArchive(){
+    let archiveList = getStorage(archive)
+    let contents = document.querySelector("#contents")
+    contents.innerHTML = ""
+
+    archiveList.forEach(() => {
+        let contentBox = document.createElement("div")
+        contentBox.classList.add("contentsBox")
+        contentBox.innerHTML = `
+            <button class="content">
+                <p class="taskTitle">${archiveList.title}</p>
+                <p class="taskDesc">${archiveList.description}</p>
+                <input class="taskDate" type="date" value="${archiveList.date}" readonly>
+                <div class="taskDOW"><p>${archiveList.DOW}</p></div>
+                <input class="taskTime" type="time" value="${archiveList.time}" readonly>
+            </button>
+        `    
+        contents.appendChild(contentBox)
+    });
+}
+
+/*function archiveTask(listName){
+    let taskList = []
+    document.querySelectorAll("#name [type=checkbox]:checked").forEach(task => {
+        listName.
+        taskList.push(task)
+    })
+
+    let archiveList = getStorage(archive)
+    addStorage(archiveList, task.title, task.description, task.date, task.DOW, task.time)
+}*/
 
 //local-storage settings
 function getStorage(listName){
