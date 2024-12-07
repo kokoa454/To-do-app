@@ -165,7 +165,7 @@ function showTasks(listName){
             let contentBox = document.createElement("div")
             contentBox.classList.add("contentsBox")
             contentBox.innerHTML = `
-                <input type="checkbox" name="#">
+                <input type="checkbox" name="#"  data-title="${dailyTask.title}" data-description="${dailyTask.description}" data-date="${dailyTask.date}" date-DOW="${dailyTask.DOW}" data-time="${dailyTask.time}">
                 <button class="content" data-index="${index}">
                     <p class="taskTitle">${dailyTask.title}</p>
                     <p class="taskDesc">${dailyTask.description}</p>
@@ -181,7 +181,7 @@ function showTasks(listName){
             let contentBox = document.createElement("div")
             contentBox.classList.add("contentsBox")
             contentBox.innerHTML = `
-                <input type="checkbox" name="#">
+                <input type="checkbox" name="#" data-title="${weeklyTask.title}" data-description="${weeklyTask.description}" data-date="${weeklyTask.date}" date-DOW="${weeklyTask.DOW}" data-time="${weeklyTask.time}">
                 <button class="content" data-index="${index}">
                     <p class="taskTitle">${weeklyTask.title}</p>
                     <p class="taskDesc">${weeklyTask.description}</p>
@@ -198,7 +198,7 @@ function showTasks(listName){
             let contentBox = document.createElement("div")
             contentBox.classList.add("contentsBox")
             contentBox.innerHTML = `
-                <input type="checkbox" name="#">
+                <input type="checkbox" name="#"  data-title="${monthlyTask.title}" data-description="${monthlyTask.description}" data-date="${monthlyTask.date}" date-DOW="${monthlyTask.DOW}" data-time="${monthlyTask.time}">
                 <button class="content" data-index="${index}">
                     <p class="taskTitle">${monthlyTask.title}</p>
                     <p class="taskDesc">${monthlyTask.description}</p>
@@ -514,7 +514,7 @@ function archiveTask(listName){
     let taskList = getStorage(listName)
     let archiveList = getStorage("archive")
 
-    document.querySelectorAll(".contentsBox input[type=checkbox]").forEach(task => {
+    document.querySelectorAll(".contentsBox input[type=checkbox]:checked").forEach(task => {
         let taskData = {
             title: task.dataset.title,
             description: task.dataset.description,
