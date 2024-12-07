@@ -58,6 +58,7 @@ function loadPage(pageKey){
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewReminder'))
+                document.querySelector('#taskclear').addEventListener('click', () => archiveTask(reminderList))
                 
                 showTasks(reminderList)
             }
@@ -69,6 +70,7 @@ function loadPage(pageKey){
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewDailyTask'))
+                document.querySelector('#taskclear').addEventListener('click', () => archiveTask(dailyList))
 
                 showTasks(dailyList)
             }
@@ -80,6 +82,7 @@ function loadPage(pageKey){
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewWeeklyTask'))
+                document.querySelector('#taskclear').addEventListener('click', () => archiveTask(weeklyList))
 
                 showTasks(weeklyList)
             }
@@ -91,6 +94,7 @@ function loadPage(pageKey){
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewMonthlyTask'))
+                document.querySelector('#taskclear').addEventListener('click', () => archiveTask(monthlyList))
 
                 showTasks(monthlyList)
             }
@@ -144,7 +148,7 @@ function showTasks(listName){
             let contentBox = document.createElement("div")
             contentBox.classList.add("contentsBox")
             contentBox.innerHTML = `
-                <input type="checkbox" name="#">
+                <input type="checkbox" name="#" data-title="${reminder.title}" data-description="${reminder.description}" data-date="${reminder.date}" date-DOW="${reminder.DOW}" data-time="${reminder.time}">
                 <button class="content" data-index="${index}">
                     <p class="taskTitle">${reminder.title}</p>
                     <p class="taskDesc">${reminder.description}</p>
@@ -486,36 +490,58 @@ function editTask(listName, index){
 
 //archive settings
 function showArchive(){
-    let archiveList = getStorage(archive)
+    let archiveList = getStorage("archive")
     let contents = document.querySelector("#contents")
     contents.innerHTML = ""
 
-    archiveList.forEach(() => {
+    archiveList.forEach((task) => {
         let contentBox = document.createElement("div")
         contentBox.classList.add("contentsBox")
         contentBox.innerHTML = `
             <button class="content">
-                <p class="taskTitle">${archiveList.title}</p>
-                <p class="taskDesc">${archiveList.description}</p>
-                <input class="taskDate" type="date" value="${archiveList.date}" readonly>
-                <div class="taskDOW"><p>${archiveList.DOW}</p></div>
-                <input class="taskTime" type="time" value="${archiveList.time}" readonly>
+                <p class="taskTitle">${task.title}</p>
+                <p class="taskDesc">${task.description}</p>
+                <input class="taskDate" type="date" value="${task.date}" readonly>
+                <div class="taskDOW"><p>${task.DOW}</p></div>
+                <input class="taskTime" type="time" value="${task.time}" readonly>
             </button>
         `    
         contents.appendChild(contentBox)
     });
 }
 
-/*function archiveTask(listName){
-    let taskList = []
-    document.querySelectorAll("#name [type=checkbox]:checked").forEach(task => {
-        listName.
-        taskList.push(task)
+function archiveTask(listName){
+    let taskList = getStorage(listName)
+    let archiveList = getStorage("archive")
+
+    document.querySelectorAll(".contentsBox input[type=checkbox]").forEach(task => {
+        let taskData = {
+            title: task.dataset.title,
+            description: task.dataset.description,
+            date: task.dataset.date,
+            DOW: task.dataset.DOW,
+            time: task.dataset.time
+        }
+
+        console.log("taskData:", taskData); // デバッグ用
+
+
+        let taskIndex = taskList.findIndex(element =>
+             element.title === taskData.title
+        )
+        console.log("taskIndex:", taskIndex); // デバッグ用
+
+
+        if(taskIndex !== -1){
+            taskList.splice(taskIndex, 1)
+        }
+
+        archiveList.push(taskData)
     })
 
-    let archiveList = getStorage(archive)
-    addStorage(archiveList, task.title, task.description, task.date, task.DOW, task.time)
-}*/
+    setStorage(listName, taskList)
+    setStorage("archive", archiveList)
+}
 
 //local-storage settings
 function getStorage(listName){
