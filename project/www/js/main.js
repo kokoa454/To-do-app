@@ -536,6 +536,16 @@ function archiveTask(listName){
 
     setStorage(listName, taskList)
     setStorage("archive", archiveList)
+
+    if(listName === reminderList){
+        loadPage("reminder")
+    } else if(listName === dailyList){
+        loadPage("dailyTasks")
+    } else if(listName === weeklyList){
+        loadPage("weeklyTasks")
+    } else if(listName === monthlyList){
+        loadPage("monthlyTasks")
+    }
 }
 
 //local-storage settings
