@@ -523,14 +523,9 @@ function archiveTask(listName){
             time: task.dataset.time
         }
 
-        console.log("taskData:", taskData); // デバッグ用
-
-
         let taskIndex = taskList.findIndex(element =>
              element.title === taskData.title
         )
-        console.log("taskIndex:", taskIndex); // デバッグ用
-
 
         if(taskIndex !== -1){
             taskList.splice(taskIndex, 1)
