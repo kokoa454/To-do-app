@@ -46,7 +46,7 @@
 ## 使用技術
 ・言語: HTML, CSS, JavaScript, Python(検討中)  
 ・ライブラリ: Chart.js(検討中)
-・データベース: LocalStorage
+・データベース: LocalStorage  
 ・開発環境: Monaca Cloud IDE(Education), VS Code  
 ・その他技術: FontAwesome, GoogleFonts  
 ・開発者: Inari Goroと2人の仲間たち  
