@@ -49,6 +49,8 @@ function loadPage(pageKey){
                 document.querySelector('#dailyTasks').addEventListener('click', () => loadPage('dailyTasks'))
                 document.querySelector('#weeklyTasks').addEventListener('click', () => loadPage('weeklyTasks'))
                 document.querySelector('#monthlyTasks').addEventListener('click', () => loadPage('monthlyTasks'))
+
+                countRemainingTasks()
             }
 
             if(pageKey === 'reminder'){
@@ -138,6 +140,39 @@ function loadPage(pageKey){
 loadPage('home')
 
 //basic task management settings
+function countRemainingTasks(){
+    let reminderCnt = 0
+    let dailyTaskCnt = 0
+    let weeklyTaskCnt = 0
+    let monthlyTaskCnt = 0
+
+    let remainingReminderList = getStorage(reminderList)
+    let remainingDailyList = getStorage(dailyList)
+    let remainingWeeklyList = getStorage(weeklyList)
+    let remainingMonthlyList = getStorage(monthlyList)
+
+    for(let i = 0; i < remainingReminderList.length; i++){
+        reminderCnt++
+    }
+
+    for(let i = 0; i < remainingDailyList.length; i++){
+        dailyTaskCnt++
+    }
+
+    for(let i = 0; i < remainingWeeklyList.length; i++){
+        weeklyTaskCnt++
+    }
+
+    for(let i = 0; i < remainingMonthlyList.length; i++){
+        monthlyTaskCnt++
+    }
+
+    document.querySelector("#reminderNum").textContent = reminderCnt
+    document.querySelector("#dailyNum").textContent = dailyTaskCnt
+    document.querySelector("#weeklyNum").textContent = weeklyTaskCnt
+    document.querySelector("#monthlyNum").textContent = monthlyTaskCnt
+}
+
 function showTasks(listName){
     let taskList = getStorage(listName)
     let contents = document.querySelector("#contents")
@@ -524,7 +559,7 @@ function archiveTask(listName){
         }
 
         let taskIndex = taskList.findIndex(element =>
-             element.title === taskData.title
+            element.title === taskData.title
         )
 
         if(taskIndex !== -1){
