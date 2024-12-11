@@ -525,7 +525,7 @@ function editTask(listName, index){
 
 //archive settings
 function showArchive(){
-    let archiveList = getStorage("archive")
+    let archiveList = getStorage("archive").reverse()
     let contents = document.querySelector("#contents")
     contents.innerHTML = ""
 
@@ -541,6 +541,21 @@ function showArchive(){
                 <input class="taskTime" type="time" value="${task.time}" readonly>
             </button>
         `    
+        /*if(!task.date || task.date === null){
+            let taskDateElement = contentBox.querySelector(".taskDate")
+            taskDateElement.style.display = 'none'
+        }
+
+        if(!task.DOW || task.DOW === null){
+            let taskDOWElement = contentBox.querySelector(".taskDOW")
+            taskDOWElement.style.display = 'none'
+        }
+
+        if(!task.time || task.time === null){
+            let taskTimeElement = contentBox.querySelector(".taskTime")
+            taskTimeElement.style.display = 'none'
+        }*/
+
         contents.appendChild(contentBox)
     });
 }

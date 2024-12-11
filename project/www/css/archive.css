@@ -1,7 +1,13 @@
+body{
+    overflow-y: visible;
+}
+
 /* --main-settings-- */
 main{
+    height: auto;
     width: 100dvw;
     margin-top: 14dvh;
+    margin-bottom: 12dvh;
     padding-top: 2dvh;
     display: flex;
     flex-direction: column;
