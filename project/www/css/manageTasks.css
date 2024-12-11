@@ -83,15 +83,16 @@ h1 {
     pointer-events: none;
 }
 
-.taskDow{
+.taskDOW{
+    height: 1.3em;
     width: 3em;
     display: block;
-    border-radius: 1dvh;
+    border-radius: 0.3dvh;
     border: 0.01em solid #000;
     font-size: 1.9dvh;
     position: absolute;
     bottom: 2dvh;
-    right: 8svh;
+    right: 12.3vh;
     pointer-events: none;
 }
 

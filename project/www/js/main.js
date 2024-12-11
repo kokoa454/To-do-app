@@ -183,7 +183,7 @@ function showTasks(listName){
             let contentBox = document.createElement("div")
             contentBox.classList.add("contentsBox")
             contentBox.innerHTML = `
-                <input type="checkbox" name="#" data-title="${reminder.title}" data-description="${reminder.description}" data-date="${reminder.date}" date-DOW="${reminder.DOW}" data-time="${reminder.time}">
+                <input type="checkbox" name="#" data-title="${reminder.title}" data-description="${reminder.description}" data-date="${reminder.date}" data-DOW="${reminder.DOW}" data-time="${reminder.time}">
                 <button class="content" data-index="${index}">
                     <p class="taskTitle">${reminder.title}</p>
                     <p class="taskDesc">${reminder.description}</p>
@@ -200,7 +200,7 @@ function showTasks(listName){
             let contentBox = document.createElement("div")
             contentBox.classList.add("contentsBox")
             contentBox.innerHTML = `
-                <input type="checkbox" name="#"  data-title="${dailyTask.title}" data-description="${dailyTask.description}" data-date="${dailyTask.date}" date-DOW="${dailyTask.DOW}" data-time="${dailyTask.time}">
+                <input type="checkbox" name="#" data-title="${dailyTask.title}" data-description="${dailyTask.description}" data-date="${dailyTask.date}" data-DOW="${dailyTask.DOW}" data-time="${dailyTask.time}">
                 <button class="content" data-index="${index}">
                     <p class="taskTitle">${dailyTask.title}</p>
                     <p class="taskDesc">${dailyTask.description}</p>
@@ -216,7 +216,7 @@ function showTasks(listName){
             let contentBox = document.createElement("div")
             contentBox.classList.add("contentsBox")
             contentBox.innerHTML = `
-                <input type="checkbox" name="#" data-title="${weeklyTask.title}" data-description="${weeklyTask.description}" data-date="${weeklyTask.date}" date-DOW="${weeklyTask.DOW}" data-time="${weeklyTask.time}">
+                <input type="checkbox" name="#" data-title="${weeklyTask.title}" data-description="${weeklyTask.description}" data-date="${weeklyTask.date}" data-DOW="${weeklyTask.DOW}" data-time="${weeklyTask.time}">
                 <button class="content" data-index="${index}">
                     <p class="taskTitle">${weeklyTask.title}</p>
                     <p class="taskDesc">${weeklyTask.description}</p>
@@ -226,6 +226,7 @@ function showTasks(listName){
             `
             contentBox.querySelector('.content').addEventListener('click', () => editTask(listName, index));
 
+            console.log(weeklyTask)
             contents.appendChild(contentBox)
         });
     } else if(listName === monthlyList){
@@ -233,7 +234,7 @@ function showTasks(listName){
             let contentBox = document.createElement("div")
             contentBox.classList.add("contentsBox")
             contentBox.innerHTML = `
-                <input type="checkbox" name="#"  data-title="${monthlyTask.title}" data-description="${monthlyTask.description}" data-date="${monthlyTask.date}" date-DOW="${monthlyTask.DOW}" data-time="${monthlyTask.time}">
+                <input type="checkbox" name="#"  data-title="${monthlyTask.title}" data-description="${monthlyTask.description}" data-date="${monthlyTask.date}" data-DOW="${monthlyTask.DOW}" data-time="${monthlyTask.time}">
                 <button class="content" data-index="${index}">
                     <p class="taskTitle">${monthlyTask.title}</p>
                     <p class="taskDesc">${monthlyTask.description}</p>
@@ -312,6 +313,7 @@ function addTask(listName){
             return
         } else {
             addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime);
+            console.log(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime)
             loadPage('weeklyTasks')
         }
     } else if(listName === monthlyList){
@@ -541,22 +543,23 @@ function showArchive(){
                 <input class="taskTime" type="time" value="${task.time}" readonly>
             </button>
         `    
-        /*if(!task.date || task.date === null){
+        if(!task.date || task.date === null || task.date === "null"){
             let taskDateElement = contentBox.querySelector(".taskDate")
             taskDateElement.style.display = 'none'
         }
 
-        if(!task.DOW || task.DOW === null){
+        if(!task.DOW || task.DOW === null || task.DOW === "null"){
             let taskDOWElement = contentBox.querySelector(".taskDOW")
             taskDOWElement.style.display = 'none'
         }
 
-        if(!task.time || task.time === null){
+        if(!task.time || task.time === null || task.time === "null"){
             let taskTimeElement = contentBox.querySelector(".taskTime")
             taskTimeElement.style.display = 'none'
-        }*/
+        }
 
         contents.appendChild(contentBox)
+        console.log(task)
     });
 }
 
@@ -569,7 +572,7 @@ function archiveTask(listName){
             title: task.dataset.title,
             description: task.dataset.description,
             date: task.dataset.date,
-            DOW: task.dataset.DOW,
+            DOW: task.dataset.dow || task.dataset.DOW,
             time: task.dataset.time
         }
 
@@ -582,6 +585,8 @@ function archiveTask(listName){
         }
 
         archiveList.push(taskData)
+        console.log(taskData)
+
     })
 
     setStorage(listName, taskList)
