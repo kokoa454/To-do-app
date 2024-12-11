@@ -11,6 +11,18 @@ h1 {
     text-align: center;
     margin-bottom: 4dvh;
     font-size: 4dvh;
+    font-family: "Loli-pop",sans-serif;
+    color: white;
+}
+
+h2 {
+    font-family: "Loli-pop",sans-serif;
+    color: white;
+}
+
+p {
+    font-family: "Loli-pop",sans-serif;
+    color: white;
 }
 
 #contentsBox{
@@ -30,7 +42,7 @@ h1 {
 
 .content h2{
     margin-bottom: 3dvh;
-    border-bottom: 0.3dvh solid black;
+    /* border-bottom: 0.3dvh solid black; */
 }
 
 #fontSize{

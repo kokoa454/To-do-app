@@ -17,7 +17,9 @@ main{
 
 h1 {
     margin-bottom: 4dvh;
-    font-size: 4dvh;
+    font-size: 5.5dvh;
+    font-family: "Loli-pop", sans-serif;
+    color: white;
 }
 
 #contents{
@@ -51,6 +53,10 @@ h1 {
     border-radius: 5px;
 }
 
+.taskTitle, .taskDesc, .taskDate, .taskDow, .taskTime{
+    font-family: "M PLUS Rounded 1c", sans-serif;
+}
+
 .taskTitle{
     font-size: 3dvh;
     margin-bottom: 1dvh;
@@ -62,33 +68,30 @@ h1 {
 }
 
 .taskTime{
-    height: 2dvh;
     font-size: 1.5dvh;
     position: absolute;
     bottom: 2dvh;
-    right: 2dvh;
+    right: 2svh;
     pointer-events: none;
 }
 
 .taskDate{
-    height: 2dvh;
     font-size: 1.5dvh;
     position: absolute;
     bottom: 2dvh;
-    right: 20dvw;
+    right: 10dvh;
     pointer-events: none;
 }
 
-.taskDOW{
-    height: 2.2dvh;
-    width: 5dvh;
-    display: absolute;
-    border-radius: 0.3dvh;
+.taskDow{
+    width: 3em;
+    display: block;
+    border-radius: 1dvh;
     border: 0.01em solid #000;
     font-size: 1.9dvh;
     position: absolute;
     bottom: 2dvh;
-    right: 21.5dvw;
+    right: 8svh;
     pointer-events: none;
 }
 

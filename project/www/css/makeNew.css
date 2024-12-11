@@ -20,6 +20,7 @@ main input, main textarea{
     padding: 0.5dvh;
     font-size: 3dvh;
     text-align: center;
+    font-family:"M PLUS Rounded 1c",sans-serif;
 }
 
 #taskDesc{
@@ -29,6 +30,7 @@ main input, main textarea{
     font-size: 3dvh;
     resize: none;
     border: 0.3dvh solid black;
+    font-family:"M PLUS Rounded 1c",sans-serif;
 }
 
 #selectDow{
@@ -63,8 +65,10 @@ main input, main textarea{
 }
 
 #buttons button{
-    width: 27dvw;
+    height: 7dvh;
+    width: 35dvw;
     padding: 1dvh;
-    font-size: 2dvh;
+    font-size: 2.5dvh;
     text-align: center;
+    color: black;
 }

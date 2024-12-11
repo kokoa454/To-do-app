@@ -5,12 +5,24 @@
 
 body{
     position: relative;
-    background-color: #ebffe0;
+     background: conic-gradient(at 5% 45%,#15202B
+    90deg,transparent 90deg)0px 0px/40px 40px,
+    conic-gradient(at 5% 45%, #15202B 90deg,
+    transparent 90deg)20px 20px/40px 40px,white;
+    background-color: #15202B;
     overflow: hidden;
+}
+
+@font-face{
+    font-family: "Loli-pop";
+    src: 
+        url("./fonts/AmeChanPopMaruLight-Regular.otf")
+        format("opentype");
 }
 
 /* --font-settings-- */
 #levelBar p{
+    color: white;
     font-family: "Audiowide", sans-serif;
 }
 
@@ -30,7 +42,7 @@ header{
 }
 
 #character, #levelBar{
-    background-color: #a9db8d;
+    background: linear-gradient(0deg,#ffc000,30%,#F58220,90%,#ea5532);
     border-bottom: solid 1px rgb(119, 117, 117);
         box-shadow:1px 1px 1px 0.5px gray;
 }
@@ -57,7 +69,7 @@ header{
 #characterIcon{
     height: 11dvh;
     width: 11dvh;
-    border-radius: 50%;
+    /* border-radius: 50%; */
 }
 
 #levelBar{
@@ -94,22 +106,22 @@ header{
 }
 
 ::-webkit-progress-bar{
-    background-color: white;
+    background-color: gray;
     border-radius: 10px;
 }
 
 ::-webkit-progress-value{
-    background-color: green;
+    background-color: #62c0ff;
     border-radius: 10px;
 }
 
 ::-moz-progress-bar{
-    background-color: white;
+    background-color: gray;
     border-radius: 10px;
 }
 
 ::-moz-progress-value{
-    background-color: green;
+    background-color:  #62c0ff;
     border-radius: 10px;
 }
 
@@ -117,7 +129,7 @@ header{
 footer{
     height: 6dvh;
     width: 100dvw;
-    background-color: #a9db8d;
+    background-color: #F58220;
     position: fixed;
     bottom: 0;
     left: 0;

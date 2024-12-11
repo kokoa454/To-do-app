@@ -18,19 +18,15 @@ main button{
     align-items: center;
     position: relative;
     border-radius: 5px;
-    background-color:#5865F2;
 }
 
 main button p{
     font-size: 4dvh;
-    font-family: "Loli-pop",sans-serif;
-    color:white;
 }
 
 #reminderNum, #dailyNum, #weeklyNum, #monthlyNum{
     position: absolute;
     right: 2dvh;
-    font-family: "Dela Gothic One", sans-serif;
 }
 
 /* --footer settings-- */
