@@ -1,6 +1,16 @@
 //general settings
-let exp = document.querySelector('#levelNum')
-let reminderCnt = document.querySelector('#reminderNum')
+let totalExp = 0
+let usrLevel = 0
+let toTheNextLevel = 40
+let maxInCurrentLevel = 40
+let currentExpInCurrentLevel = maxInCurrentLevel - toTheNextLevel
+document.querySelector('#levelNum').textContent = usrLevel
+document.querySelector('#levelCnt').textContent = toTheNextLevel
+document.querySelector('#levelProgressbar').max = maxInCurrentLevel
+const reminderPoint = 20
+const dailyPoint = 30
+const weeklyPoint = 70
+const monthlyPoint = 150
 const reminderList = "ReminderList"
 const dailyList = "DailyList"
 const weeklyList = "WeeklyList"
@@ -600,6 +610,19 @@ function archiveTask(listName){
         loadPage("weeklyTasks")
     } else if(listName === monthlyList){
         loadPage("monthlyTasks")
+    }
+}
+
+//Level and Exp settings
+function countLevelAndExp(listName){
+    if(listName === reminderList){
+        totalExp += reminderPoint
+    } else if(listName === dailyList){
+        totalExp += dailyPoint
+    } else if(listName === weeklyList){
+        totalExp += weeklyPoint
+    } else if(listName === monthlyList){
+        totalExp += monthlyPoint
     }
 }
 
