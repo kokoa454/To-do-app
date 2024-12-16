@@ -1,12 +1,12 @@
 //general settings
-let totalExp = 0
 let usrLevel = 0
-let toTheNextLevel = 40
 let maxInCurrentLevel = 40
-let currentExpInCurrentLevel = maxInCurrentLevel - toTheNextLevel
+let valueInCurrentLevel = 0
+let toTheNextLevel = maxInCurrentLevel - valueInCurrentLevel
 document.querySelector('#levelNum').textContent = usrLevel
 document.querySelector('#levelCnt').textContent = toTheNextLevel
 document.querySelector('#levelProgressbar').max = maxInCurrentLevel
+document.querySelector('#levelProgressbar').value = valueInCurrentLevel
 const reminderPoint = 20
 const dailyPoint = 30
 const weeklyPoint = 70
@@ -569,7 +569,6 @@ function showArchive(){
         }
 
         contents.appendChild(contentBox)
-        console.log(task)
     });
 }
 
@@ -595,8 +594,7 @@ function archiveTask(listName){
         }
 
         archiveList.push(taskData)
-        console.log(taskData)
-
+        countLevelAndExp(listName)
     })
 
     setStorage(listName, taskList)
@@ -616,14 +614,32 @@ function archiveTask(listName){
 //Level and Exp settings
 function countLevelAndExp(listName){
     if(listName === reminderList){
-        totalExp += reminderPoint
+        valueInCurrentLevel += reminderPoint
     } else if(listName === dailyList){
-        totalExp += dailyPoint
+        valueInCurrentLevel += dailyPoint
     } else if(listName === weeklyList){
-        totalExp += weeklyPoint
+        valueInCurrentLevel += weeklyPoint
     } else if(listName === monthlyList){
-        totalExp += monthlyPoint
+        valueInCurrentLevel += monthlyPoint
     }
+
+    toTheNextLevel = maxInCurrentLevel - valueInCurrentLevel
+
+    if(valueInCurrentLevel >= maxInCurrentLevel){
+        usrLevel++
+        document.querySelector('#levelNum').textContent = usrLevel
+        maxInCurrentLevel = maxInCurrentLevel * 2
+        document.querySelector('#levelProgressbar').max = maxInCurrentLevel
+        valueInCurrentLevel = 0
+    }
+
+    document.querySelector('#levelCnt').textContent = toTheNextLevel
+    document.querySelector('#levelProgressbar').value = valueInCurrentLevel    
+
+    console.log(usrLevel)
+    console.log(toTheNextLevel)
+    console.log(maxInCurrentLevel)
+    console.log(valueInCurrentLevel)
 }
 
 //local-storage settings
