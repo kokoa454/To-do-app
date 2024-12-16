@@ -1,6 +1,6 @@
 //general settings
-let usrLevel = 0
-let maxInCurrentLevel = 40
+let usrLevel = 1
+let maxInCurrentLevel = 10
 let valueInCurrentLevel = 0
 let toTheNextLevel = maxInCurrentLevel - valueInCurrentLevel
 document.querySelector('#levelNum').textContent = usrLevel
@@ -623,18 +623,17 @@ function countLevelAndExp(listName){
         valueInCurrentLevel += monthlyPoint
     }
 
-    toTheNextLevel = maxInCurrentLevel - valueInCurrentLevel
-
-    if(valueInCurrentLevel >= maxInCurrentLevel){
+    while(valueInCurrentLevel >= maxInCurrentLevel){
         usrLevel++
-        document.querySelector('#levelNum').textContent = usrLevel
         maxInCurrentLevel = maxInCurrentLevel * 2
-        document.querySelector('#levelProgressbar').max = maxInCurrentLevel
-        valueInCurrentLevel = 0
+        valueInCurrentLevel -= maxInCurrentLevel / 2
     }
 
+    toTheNextLevel = maxInCurrentLevel - valueInCurrentLevel
     document.querySelector('#levelCnt').textContent = toTheNextLevel
-    document.querySelector('#levelProgressbar').value = valueInCurrentLevel    
+    document.querySelector('#levelProgressbar').value = valueInCurrentLevel
+    document.querySelector('#levelProgressbar').max = maxInCurrentLevel
+    document.querySelector('#levelNum').textContent = usrLevel
 
     console.log(usrLevel)
     console.log(toTheNextLevel)
