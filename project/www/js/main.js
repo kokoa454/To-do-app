@@ -1,12 +1,7 @@
 //general settings
-let usrLevel = 1
-let maxInCurrentLevel = 10
-let valueInCurrentLevel = 0
-let toTheNextLevel = maxInCurrentLevel - valueInCurrentLevel
-document.querySelector('#levelNum').textContent = usrLevel
-document.querySelector('#levelCnt').textContent = toTheNextLevel
-document.querySelector('#levelProgressbar').max = maxInCurrentLevel
-document.querySelector('#levelProgressbar').value = valueInCurrentLevel
+let usrLevel
+let maxInCurrentLevel
+let valueInCurrentLevel
 const reminderPoint = 20
 const dailyPoint = 30
 const weeklyPoint = 70
@@ -15,6 +10,7 @@ const reminderList = "ReminderList"
 const dailyList = "DailyList"
 const weeklyList = "WeeklyList"
 const monthlyList = "MonthlyList"
+loadLevelAndExp()
 
 //page-load settings
 const pages = {
@@ -635,10 +631,7 @@ function countLevelAndExp(listName){
     document.querySelector('#levelProgressbar').max = maxInCurrentLevel
     document.querySelector('#levelNum').textContent = usrLevel
 
-    console.log(usrLevel)
-    console.log(toTheNextLevel)
-    console.log(maxInCurrentLevel)
-    console.log(valueInCurrentLevel)
+    saveLevelAndExp()
 }
 
 //local-storage settings
@@ -665,4 +658,28 @@ function addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime){
 
 function setStorage(listName, taskList){
     localStorage.setItem(listName, JSON.stringify(taskList))
+}
+
+function saveLevelAndExp(){
+    localStorage.setItem('usrLevel', usrLevel)
+    localStorage.setItem('valueInCurrentLevel', valueInCurrentLevel)
+    localStorage.setItem('maxInCurrentLevel', maxInCurrentLevel)
+}
+
+function loadLevelAndExp(){
+    usrLevel = JSON.parse(localStorage.getItem('usrLevel'))
+    valueInCurrentLevel = JSON.parse(localStorage.getItem('valueInCurrentLevel'))
+    maxInCurrentLevel = JSON.parse(localStorage.getItem('maxInCurrentLevel'))
+
+    if(usrLevel === null || valueInCurrentLevel === null || maxInCurrentLevel === null){
+        usrLevel = 1
+        maxInCurrentLevel = 10
+        valueInCurrentLevel = 0
+    }
+
+    toTheNextLevel = maxInCurrentLevel - valueInCurrentLevel
+    document.querySelector('#levelCnt').textContent = toTheNextLevel
+    document.querySelector('#levelProgressbar').value = valueInCurrentLevel
+    document.querySelector('#levelProgressbar').max = maxInCurrentLevel
+    document.querySelector('#levelNum').textContent = usrLevel
 }
