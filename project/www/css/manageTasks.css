@@ -20,6 +20,8 @@ h1 {
     font-size: 5.5dvh;
     font-family: "Loli-pop", sans-serif;
     color: white;
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: black;
 }
 
 #contents{
@@ -51,10 +53,12 @@ h1 {
     flex-direction: column;
     position: relative;
     border-radius: 5px;
+    color: #000;
 }
 
 .taskTitle, .taskDesc, .taskDate, .taskDow, .taskTime{
     font-family: "M PLUS Rounded 1c", sans-serif;
+    color: #000;
 }
 
 .taskTitle{
@@ -97,8 +101,8 @@ h1 {
 }
 
 #plusButton{
-    height: 6dvh;
-    width: 6dvh;
+    height: 7dvh;
+    width: 7dvh;
     border-radius:50%;
     padding: 0;
     background-color: rgb(255, 255, 255);
@@ -108,7 +112,9 @@ h1 {
 }
 
 #plusButton p{
-    font-size: 4dvh;
+    font-size: 6dvh;
+    margin-bottom:1dvh;
+    color:black;
 }
 
 #taskclear{

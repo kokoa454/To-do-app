@@ -5,11 +5,10 @@ let valueInCurrentLevel
 const reminderPoint = 20
 const dailyPoint = 30
 const weeklyPoint = 70
-const monthlyPoint = 150
 const reminderList = "ReminderList"
 const dailyList = "DailyList"
 const weeklyList = "WeeklyList"
-const monthlyList = "MonthlyList"
+const dailyList_cpy = "DailyList_cpy"
 loadLevelAndExp()
 
 //page-load settings
@@ -22,17 +21,14 @@ const pages = {
     reminder: {html: 'listReminder.html', css: 'css/manageTasks.css'},
     dailyTasks: {html: 'listDailyTasks.html', css: 'css/manageTasks.css'},
     weeklyTasks: {html: 'listWeeklyTasks.html', css: 'css/manageTasks.css'},
-    monthlyTasks: {html: 'listMonthlyTasks.html', css: 'css/manageTasks.css'},
     
     makeNewReminder: {html: 'makeNewReminder.html', css: 'css/makeNew.css'},
     makeNewDailyTask: {html: 'makeNewDailyTask.html', css: 'css/makeNew.css'},
     makeNewWeeklyTask: {html: 'makeNewWeeklyTask.html', css: 'css/makeNew.css'},
-    makeNewMonthlyTask: {html: 'makeNewMonthlyTask.html', css: 'css/makeNew.css'},
 
     editReminder: {html: 'editReminder.html', css: 'css/editTask.css'},
     editDailyTask: {html: 'editDailyTask.html', css: 'css/editTask.css'},
-    editWeeklyTask: {html: 'editWeeklyTask.html', css: 'css/editTask.css'},
-    editMonthlyTask: {html: 'editMonthlyTask.html', css: 'css/editTask.css'}
+    editWeeklyTask: {html: 'editWeeklyTask.html', css: 'css/editTask.css'}
 }
 
 const cssLink = document.querySelector('#dynamicCss')
@@ -48,13 +44,12 @@ function loadPage(pageKey){
 
             if(pageKey === 'home'){
                 document.querySelector('#graph').addEventListener('click', () => loadPage('graph'))
-                document.querySelector('#archive').addEventListener('click', () => loadPage('archive'))
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 document.querySelector('#reminder').addEventListener('click', () => loadPage('reminder'))
                 document.querySelector('#dailyTasks').addEventListener('click', () => loadPage('dailyTasks'))
                 document.querySelector('#weeklyTasks').addEventListener('click', () => loadPage('weeklyTasks'))
-                document.querySelector('#monthlyTasks').addEventListener('click', () => loadPage('monthlyTasks'))
+                document.querySelector('#archive').addEventListener('click', () => loadPage('archive'))
 
                 countRemainingTasks()
             }
@@ -62,7 +57,6 @@ function loadPage(pageKey){
             if(pageKey === 'reminder'){
                 document.querySelector('#home').addEventListener('click', () => loadPage('home'))
                 document.querySelector('#graph').addEventListener('click', () => loadPage('graph'))
-                document.querySelector('#archive').addEventListener('click', () => loadPage('archive'))
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewReminder'))
@@ -74,37 +68,24 @@ function loadPage(pageKey){
             if(pageKey === 'dailyTasks'){
                 document.querySelector('#home').addEventListener('click', () => loadPage('home'))
                 document.querySelector('#graph').addEventListener('click', () => loadPage('graph'))
-                document.querySelector('#archive').addEventListener('click', () => loadPage('archive'))
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewDailyTask'))
                 document.querySelector('#taskclear').addEventListener('click', () => archiveTask(dailyList))
 
                 showTasks(dailyList)
+                loadDailyList_cpy()
             }
 
             if(pageKey === 'weeklyTasks'){
                 document.querySelector('#home').addEventListener('click', () => loadPage('home'))
                 document.querySelector('#graph').addEventListener('click', () => loadPage('graph'))
-                document.querySelector('#archive').addEventListener('click', () => loadPage('archive'))
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewWeeklyTask'))
                 document.querySelector('#taskclear').addEventListener('click', () => archiveTask(weeklyList))
 
                 showTasks(weeklyList)
-            }
-
-            if(pageKey === 'monthlyTasks'){
-                document.querySelector('#home').addEventListener('click', () => loadPage('home'))
-                document.querySelector('#graph').addEventListener('click', () => loadPage('graph'))
-                document.querySelector('#archive').addEventListener('click', () => loadPage('archive'))
-                document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
-
-                document.querySelector('#plusButton').addEventListener('click', () => loadPage('makeNewMonthlyTask'))
-                document.querySelector('#taskclear').addEventListener('click', () => archiveTask(monthlyList))
-
-                showTasks(monthlyList)
             }
 
             if(pageKey === 'makeNewReminder'){
@@ -120,11 +101,6 @@ function loadPage(pageKey){
             if(pageKey === 'makeNewWeeklyTask'){
                 document.querySelector('#okButton').addEventListener('click', () => addTask(weeklyList))
                 document.querySelector('#cancelButton').addEventListener('click', () => loadPage('weeklyTasks'))
-            }
-
-            if(pageKey === 'makeNewMonthlyTask'){
-                document.querySelector('#okButton').addEventListener('click', () => addTask(monthlyList))
-                document.querySelector('#cancelButton').addEventListener('click', () => loadPage('monthlyTasks'))
             }
 
             if(pageKey === 'archive'){
@@ -150,12 +126,10 @@ function countRemainingTasks(){
     let reminderCnt = 0
     let dailyTaskCnt = 0
     let weeklyTaskCnt = 0
-    let monthlyTaskCnt = 0
 
     let remainingReminderList = getStorage(reminderList)
     let remainingDailyList = getStorage(dailyList)
     let remainingWeeklyList = getStorage(weeklyList)
-    let remainingMonthlyList = getStorage(monthlyList)
 
     for(let i = 0; i < remainingReminderList.length; i++){
         reminderCnt++
@@ -169,14 +143,9 @@ function countRemainingTasks(){
         weeklyTaskCnt++
     }
 
-    for(let i = 0; i < remainingMonthlyList.length; i++){
-        monthlyTaskCnt++
-    }
-
     document.querySelector("#reminderNum").textContent = reminderCnt
     document.querySelector("#dailyNum").textContent = dailyTaskCnt
     document.querySelector("#weeklyNum").textContent = weeklyTaskCnt
-    document.querySelector("#monthlyNum").textContent = monthlyTaskCnt
 }
 
 function showTasks(listName){
@@ -197,7 +166,7 @@ function showTasks(listName){
                     <input class="taskTime" type="time" value="${reminder.time}" readonly>
                 </button>
             `
-            contentBox.querySelector('.content').addEventListener('click', () => editTask(listName, index));
+            contentBox.querySelector('.content').addEventListener('click', () => editTask(listName, index))
     
             contents.appendChild(contentBox)
         });
@@ -213,7 +182,7 @@ function showTasks(listName){
                     <input class="taskTime" type="time" value="${dailyTask.time}" readonly>
                 </button>
             `
-            contentBox.querySelector('.content').addEventListener('click', () => editTask(listName, index));
+            contentBox.querySelector('.content').addEventListener('click', () => editTask(listName, index))
 
             contents.appendChild(contentBox)
         });
@@ -235,23 +204,6 @@ function showTasks(listName){
             console.log(weeklyTask)
             contents.appendChild(contentBox)
         });
-    } else if(listName === monthlyList){
-        taskList.forEach((monthlyTask,index) => {
-            let contentBox = document.createElement("div")
-            contentBox.classList.add("contentsBox")
-            contentBox.innerHTML = `
-                <input type="checkbox" name="#"  data-title="${monthlyTask.title}" data-description="${monthlyTask.description}" data-date="${monthlyTask.date}" data-DOW="${monthlyTask.DOW}" data-time="${monthlyTask.time}">
-                <button class="content" data-index="${index}">
-                    <p class="taskTitle">${monthlyTask.title}</p>
-                    <p class="taskDesc">${monthlyTask.description}</p>
-                    <input class="taskDate" type="date" value="${monthlyTask.date}" readonly>
-                    <input class="taskTime" type="time" value="${monthlyTask.time}" readonly>
-                </button>
-            `
-            contentBox.querySelector('.content').addEventListener('click', () => editTask(listName, index));
-
-            contents.appendChild(contentBox)
-        });
     }
 }
 
@@ -267,7 +219,7 @@ function addTask(listName){
             alert("タイトルを入力してください")
             return
         } else {
-            addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime);
+            addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime)
             loadPage('reminder')
         }
     } else if(listName === dailyList){
@@ -276,12 +228,14 @@ function addTask(listName){
         let taskDate = null
         let taskDOW = null
         let taskTime = document.querySelector('#taskTime').value
+        let savedDateData = new Date().getDay()
 
         if(taskTitle === ""){
             alert("タイトルを入力してください")
             return
         } else {
-            addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime);
+            addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime)
+            saveDailyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedDateData)
             loadPage('dailyTasks')
         }
     } else if(listName === weeklyList){
@@ -318,23 +272,9 @@ function addTask(listName){
             alert("タイトルを入力してください")
             return
         } else {
-            addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime);
+            addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime)
             console.log(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime)
             loadPage('weeklyTasks')
-        }
-    } else if(listName === monthlyList){
-        let taskTitle = document.querySelector('#taskTitle').value
-        let taskDesc = document.querySelector('#taskDesc').value
-        let taskDate = document.querySelector('#taskDate').value
-        let taskDOW = null
-        let taskTime = document.querySelector('#taskTime').value
-
-        if(taskTitle === ""){
-            alert("タイトルを入力してください")
-            return
-        } else {
-            addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime);
-            loadPage('monthlyTasks')
         }
     }
 }
@@ -403,11 +343,13 @@ function editTask(listName, index){
                     task.time = taskTime.value
 
                     setStorage(listName, taskList)
+                    setStorage(dailyList_cpy, taskList)
                     loadPage('dailyTasks')
                 }
             })
 
             document.querySelector('#deleteButton').addEventListener('click', () => {
+                deleteDailyList_cpy(taskList)
                 taskList.splice(index, 1)
                 setStorage(listName, taskList)
                 loadPage('dailyTasks')
@@ -492,42 +434,6 @@ function editTask(listName, index){
                 loadPage('weeklyTasks')
             })
         }, 50)
-    } else if(listName === monthlyList){
-        loadPage('editMonthlyTask')
-
-        setTimeout(() => {
-            let taskTitle = document.querySelector('#taskTitle')
-            let taskDesc = document.querySelector('#taskDesc')
-            let taskDate = document.querySelector('#taskDate')
-            let taskTime = document.querySelector('#taskTime')
-
-            taskTitle.value = task.title
-            taskDesc.value = task.description
-            taskDate.value = task.date
-            taskTime.value = task.time
-
-            document.querySelector('#okButton').addEventListener('click', () => {
-                if(taskTitle.value === ""){
-                    alert("タイトルを入力してください")
-                    return
-                } else {
-                    task.title = taskTitle.value
-                    task.description = taskDesc.value
-                    task.date = taskDate.value
-                    task.DOW = null
-                    task.time = taskTime.value
-
-                    setStorage(listName, taskList)
-                    loadPage('monthlyTasks')
-                }
-            })
-
-            document.querySelector('#deleteButton').addEventListener('click', () => {
-                taskList.splice(index, 1)
-                setStorage(listName, taskList)
-                loadPage('monthlyTasks')
-            })
-        }, 50)
     }
 }
 
@@ -602,8 +508,6 @@ function archiveTask(listName){
         loadPage("dailyTasks")
     } else if(listName === weeklyList){
         loadPage("weeklyTasks")
-    } else if(listName === monthlyList){
-        loadPage("monthlyTasks")
     }
 }
 
@@ -615,8 +519,6 @@ function countLevelAndExp(listName){
         valueInCurrentLevel += dailyPoint
     } else if(listName === weeklyList){
         valueInCurrentLevel += weeklyPoint
-    } else if(listName === monthlyList){
-        valueInCurrentLevel += monthlyPoint
     }
 
     while(valueInCurrentLevel >= maxInCurrentLevel){
@@ -660,6 +562,64 @@ function setStorage(listName, taskList){
     localStorage.setItem(listName, JSON.stringify(taskList))
 }
 
+function loadDailyList_cpy() {
+    const storageList = getStorage("dailyList_cpy")
+    if (storageList.length > 0) {
+        let currentDay = new Date()
+        let dailyTasks = getStorage("dailyList")
+
+        let updatedTasks = dailyTasks.slice()
+
+        storageList.forEach(storedTask => {
+            if (storedTask.savedDate !== currentDay) {
+                let isTaskExisting = updatedTasks.some(
+                    dailyTask => dailyTask.title === storedTask.title
+                )
+
+                if (!isTaskExisting) {
+                    updatedTasks.push({
+                        title: storedTask.title,
+                        description: storedTask.description,
+                        date: storedTask.date,
+                        DOW: storedTask.DOW,
+                        time: storedTask.time
+                    })
+                }
+            }
+        })
+
+        setStorage("dailyList", updatedTasks);
+    }
+}
+
+function deleteDailyList_cpy(task) {
+    let copyList = getStorage(dailyList_cpy)
+    if (copyList && copyList.length > 0) {
+        copyList = copyList.filter(item => item.title !== task.title)
+        setStorage(dailyList_cpy, copyList)
+    }
+}
+
+function saveDailyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedDateData) {
+    let taskList = getStorage(dailyList_cpy) || []
+    
+    const existingTaskIndex = taskList.findIndex(task => task.title === taskTitle)
+    if (existingTaskIndex !== -1) {
+        taskList.splice(existingTaskIndex, 1)
+    }
+    
+    taskList.push({
+        title: taskTitle,
+        description: taskDesc,
+        date: taskDate,
+        DOW: taskDOW,
+        time: taskTime,
+        savedDate: savedDateData
+    });
+    
+    setStorage(dailyList_cpy, taskList)
+}
+
 function saveLevelAndExp(){
     localStorage.setItem('usrLevel', usrLevel)
     localStorage.setItem('valueInCurrentLevel', valueInCurrentLevel)
@@ -682,4 +642,66 @@ function loadLevelAndExp(){
     document.querySelector('#levelProgressbar').value = valueInCurrentLevel
     document.querySelector('#levelProgressbar').max = maxInCurrentLevel
     document.querySelector('#levelNum').textContent = usrLevel
+}
+
+//font settings
+//フォントを取り込んでローカルに保存する関数
+function saveFontSize(){
+    let fontSize = document.getElementById('fontSizeSet').value;
+
+    localStorage.setItem('fontSize', fontSize)
+
+    console.log(fontSize);
+
+    patchFontSize(fontSize);
+}
+
+//ページ読み込み時にローカルストレージからフォントサイズを読み込む関数
+function loadFontSize(){
+
+    let savedFontSize = localStorage.getItem('fontSize')
+    let fontSize = savedFontSize
+
+    if(fontSize == undefined){
+        fontSize = '1';
+    }
+
+    console.log(fontSize);
+    patchFontSize(fontSize);
+    
+}
+
+//フォントサイズを適用する関数
+function patchFontSize(fontSizePatch){
+   let title = document.querySelector('.taskTitle');
+   let desc = document.querySelector('.taskDesc');
+    
+    let titlesize;
+    let descsize;
+
+    switch(fontSizePatch) {
+        case '0' :
+            titlesize = '2.5dvh';
+            descsize = '0.8dvh';
+            break;
+        case '1' :
+            titlesize = '3dvh';
+            descsize = '1dvh';
+            break;
+        case '2' :
+            titlesize = '5dvh';
+            descsize = '2.5dvh';
+            break;
+        default:
+            titlesize = '3dvh';
+            descsize = '1dvh';
+            break;
+    }
+
+    if(title){
+        title.style.fontSize = titlesize;
+        desc.style.fontSize = descsize;
+    }else {
+        console.log("タイトル読み込みエラー");
+    }
 }

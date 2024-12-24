@@ -27,7 +27,14 @@ main button p{
     color:white;
 }
 
-#reminderNum, #dailyNum, #weeklyNum, #monthlyNum{
+#archive{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#reminderNum, #dailyNum, #weeklyNum{
     position: absolute;
     right: 2dvh;
     font-family: "Dela Gothic One", sans-serif;

@@ -5,11 +5,7 @@
 
 body{
     position: relative;
-     background: conic-gradient(at 5% 45%,#15202B
-    90deg,transparent 90deg)0px 0px/40px 40px,
-    conic-gradient(at 5% 45%, #15202B 90deg,
-    transparent 90deg)20px 20px/40px 40px,white;
-    background-color: #15202B;
+    background-color: #d1e8ff;
     overflow: hidden;
 }
 

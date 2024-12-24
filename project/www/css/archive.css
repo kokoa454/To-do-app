@@ -17,8 +17,11 @@ main{
 
 h1 {
     margin-bottom: 4dvh;
+    font-size: 5.5dvh;
     font-family: "Loli-pop",sans-serif;
     color: white;
+    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-color: black;
 }
 
 #contents{
@@ -45,6 +48,7 @@ h1 {
     flex-direction: column;
     position: relative;
     border-radius: 5px;
+    color: #000;
 }
 
 .taskTitle{
@@ -64,6 +68,7 @@ h1 {
     bottom: 2dvh;
     right: 2dvh;
     pointer-events: none;
+    color: #000;
 }
 
 .taskDate{
@@ -73,6 +78,7 @@ h1 {
     bottom: 2dvh;
     right: 17.6dvh;
     pointer-events: none;
+    color: #000;
 }
 
 .taskDOW{
