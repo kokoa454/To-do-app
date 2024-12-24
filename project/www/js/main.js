@@ -9,6 +9,7 @@ const reminderList = "ReminderList"
 const dailyList = "DailyList"
 const weeklyList = "WeeklyList"
 const dailyList_cpy = "DailyList_cpy"
+const weeklyList_cpy = "WeeklyList_cpy"
 loadLevelAndExp()
 
 //page-load settings
@@ -86,6 +87,7 @@ function loadPage(pageKey){
                 document.querySelector('#taskclear').addEventListener('click', () => archiveTask(weeklyList))
 
                 showTasks(weeklyList)
+                loadWeeklyList_cpy()
             }
 
             if(pageKey === 'makeNewReminder'){
@@ -228,7 +230,7 @@ function addTask(listName){
         let taskDate = null
         let taskDOW = null
         let taskTime = document.querySelector('#taskTime').value
-        let savedDateData = new Date().getDay()
+        let savedDateData = new Date().getDate()
 
         if(taskTitle === ""){
             alert("タイトルを入力してください")
@@ -243,37 +245,46 @@ function addTask(listName){
         let taskDesc = document.querySelector('#taskDesc').value
         let taskDate = null
         let taskDOW
+        let savedDOWDate
         switch(document.querySelector('#taskDOW').value){
             case 'monday':
                 taskDOW = '月'
+                savedDataDOW = 1
                 break
             case 'tuesday':
                 taskDOW = '火'
+                savedDataDOW = 2
                 break
             case 'wednesday':
                 taskDOW = '水'
+                savedDataDOW = 3
                 break
             case 'thursday':
                 taskDOW = '木'
+                savedDataDOW = 4
                 break
             case 'friday':
                 taskDOW = '金'
+                savedDataDOW = 5
                 break
             case 'saturday':
                 taskDOW = '土'
+                savedDataDOW = 6
                 break
             case 'sunday':
                 taskDOW = '日'
+                savedDataDOW = 0
                 break
         }
         let taskTime = document.querySelector('#taskTime').value
+        let savedDateData = new Date().getDate()
 
         if(taskTitle === ""){
             alert("タイトルを入力してください")
             return
         } else {
             addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime)
-            console.log(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime)
+            saveDailyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedDOWDate, savedDateData)
             loadPage('weeklyTasks')
         }
     }
@@ -424,6 +435,7 @@ function editTask(listName, index){
                     task.time = taskTime.value
 
                     setStorage(listName, taskList)
+                    setStorage(weeklyList_cpy, taskList)
                     loadPage('weeklyTasks')
                 }
             })
@@ -565,7 +577,7 @@ function setStorage(listName, taskList){
 function loadDailyList_cpy() {
     const storageList = getStorage("dailyList_cpy")
     if (storageList.length > 0) {
-        let currentDay = new Date()
+        let currentDay = new Date().getDate()
         let dailyTasks = getStorage("dailyList")
 
         let updatedTasks = dailyTasks.slice()
@@ -618,6 +630,65 @@ function saveDailyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, sav
     });
     
     setStorage(dailyList_cpy, taskList)
+}
+
+function loadWeeklyList_cpy() {
+    const storageList = getStorage("weeklyList_cpy")
+    if (storageList.length > 0) {
+        let currentDOW = new Date().getDay()
+        let currentDay = new Date()
+        let weeklyTasks = getStorage("weeklyList")
+
+        let updatedTasks = weeklyTasks.slice()
+
+        storageList.forEach(storedTask => {
+            if (storedTask.savedDOW === currentDOW && storedTask.savedDate !== currentDay) {
+                let isTaskExisting = updatedTasks.some(
+                    weeklyTask => weeklyTask.title === storedTask.title
+                )
+
+                if (!isTaskExisting) {
+                    updatedTasks.push({
+                        title: storedTask.title,
+                        description: storedTask.description,
+                        date: storedTask.date,
+                        DOW: storedTask.DOW,
+                        time: storedTask.time
+                    })
+                }
+            }
+        })
+
+        setStorage("weeklyList", updatedTasks);
+    }
+}
+
+function deleteWeeklyList_cpy(task) {
+    let copyList = getStorage(weeklyList_cpy)
+    if (copyList && copyList.length > 0) {
+        copyList = copyList.filter(item => item.title !== task.title)
+        setStorage(weeklyList_cpy, copyList)
+    }
+}
+
+function saveWeeklyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedDateData) {
+    let taskList = getStorage(weeklyList_cpy) || []
+    
+    const existingTaskIndex = taskList.findIndex(task => task.title === taskTitle)
+    if (existingTaskIndex !== -1) {
+        taskList.splice(existingTaskIndex, 1)
+    }
+    
+    taskList.push({
+        title: taskTitle,
+        description: taskDesc,
+        date: taskDate,
+        DOW: taskDOW,
+        time: taskTime,
+        savedDate: savedDateData
+    });
+    
+    setStorage(weeklyList_cpy, taskList)
 }
 
 function saveLevelAndExp(){
@@ -673,8 +744,8 @@ function loadFontSize(){
 
 //フォントサイズを適用する関数
 function patchFontSize(fontSizePatch){
-   let title = document.querySelector('.taskTitle');
-   let desc = document.querySelector('.taskDesc');
+    let title = document.querySelector('.taskTitle');
+    let desc = document.querySelector('.taskDesc');
     
     let titlesize;
     let descsize;
