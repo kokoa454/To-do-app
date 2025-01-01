@@ -15,7 +15,7 @@ loadLevelAndExp()
 //page-load settings
 const pages = {
     home: {html: 'home.html', css: 'css/home.css'},
-    graph: {html: '', css: ''},
+    graph: {html: 'graph.html', css: 'css/graph.css'},
     archive: {html: 'archive.html', css: 'css/archive.css'},
     settings: {html: 'settings.html', css: 'css/settings.css'},
 
@@ -113,6 +113,12 @@ function loadPage(pageKey){
                 document.querySelector('#graph').addEventListener('click', () => loadPage('graph'))
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
                 showArchive()
+                loadFontSize()
+            }
+
+            if(pageKey === 'graph'){
+                document.querySelector('#home').addEventListener('click', () => loadPage('home'))
+                document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
             }
 
             if(pageKey === 'settings'){
@@ -206,7 +212,6 @@ function showTasks(listName){
             `
             contentBox.querySelector('.content').addEventListener('click', () => editTask(listName, index));
 
-            console.log(weeklyTask)
             contents.appendChild(contentBox)
         });
     }
@@ -454,6 +459,8 @@ function editTask(listName, index){
 
 //archive settings
 function showArchive(){
+    deleteArchivedTask()
+
     let archiveList = getStorage("archive").reverse()
     let contents = document.querySelector("#contents")
     contents.innerHTML = ""
@@ -492,6 +499,7 @@ function showArchive(){
 function archiveTask(listName){
     let taskList = getStorage(listName)
     let archiveList = getStorage("archive")
+    let month = new Date().getMonth()
 
     document.querySelectorAll(".contentsBox input[type=checkbox]:checked").forEach(task => {
         let taskData = {
@@ -499,7 +507,8 @@ function archiveTask(listName){
             description: task.dataset.description,
             date: task.dataset.date,
             DOW: task.dataset.dow || task.dataset.DOW,
-            time: task.dataset.time
+            time: task.dataset.time,
+            archivedMonth: month
         }
 
         let taskIndex = taskList.findIndex(element =>
@@ -524,6 +533,19 @@ function archiveTask(listName){
     } else if(listName === weeklyList){
         loadPage("weeklyTasks")
     }
+}
+
+function deleteArchivedTask(){
+    let archiveList = getStorage("archive")
+    let month = new Date().getMonth()
+
+    archiveList.forEach((task, index) => {
+        if(task.archivedMonth <= month - 4){
+            archiveList.splice(index, 1)
+        }
+    })
+
+    setStorage("archive", archiveList)
 }
 
 //Level and Exp settings
@@ -719,7 +741,6 @@ function loadLevelAndExp(){
 }
 
 //font settings
-
 //フォントを取り込んでローカルに保存する関数
 function saveFontSize(){
     let fontSize = document.getElementById('fontSizeSet').value;
@@ -744,9 +765,6 @@ function loadFontSize(){
 
 //フォントサイズを適用する関数
 function patchFontSize(fontSizePatch){
-    let title = document.querySelector('.taskTitle');
-    let desc = document.querySelector('.taskDesc');
-    
     let titlesize;
     let descsize;
 
@@ -763,17 +781,18 @@ function patchFontSize(fontSizePatch){
             titlesize = '5dvh';
             descsize = '2.5dvh';
             break;
-        default: //the default font-size is as same as the medium one
-            titlesize = '3dvh';
-            descsize = '1dvh';
-            break;
     }
 
-    if(title){
-        title.style.fontSize = titlesize;
-    }
+    const titles = document.querySelectorAll('.taskTitle')
+    const descs = document.querySelectorAll('.taskDesc')
 
-    if(desc){
-        desc.style.fontSize = descsize;
-    }
+    titles.forEach(title => {
+        title.style.fontSize = titlesize
+    })
+
+    descs.forEach(desc => {
+        desc.style.fontSize = descsize
+    })
 }
+
+//graph settings

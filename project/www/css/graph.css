@@ -1,0 +1,21 @@
+body{
+    overflow-y: visible;
+}
+
+main{
+    height: auto;
+    width: 100dvw;
+    margin-top: 14dvh;
+    margin-bottom: 12dvh;
+    padding-top: 2dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 10dvh;
+}
+
+#barChart-achievement{
+    height: 30%;
+    width: 80%;
+}
