@@ -64,6 +64,7 @@ function loadPage(pageKey){
                 document.querySelector('#taskclear').addEventListener('click', () => archiveTask(reminderList))
                 
                 showTasks(reminderList)
+                loadFontSize()
             }
 
             if(pageKey === 'dailyTasks'){
@@ -76,6 +77,7 @@ function loadPage(pageKey){
 
                 showTasks(dailyList)
                 loadDailyList_cpy()
+                loadFontSize()
             }
 
             if(pageKey === 'weeklyTasks'){
@@ -88,6 +90,7 @@ function loadPage(pageKey){
 
                 showTasks(weeklyList)
                 loadWeeklyList_cpy()
+                loadFontSize()
             }
 
             if(pageKey === 'makeNewReminder'){
@@ -115,6 +118,7 @@ function loadPage(pageKey){
             if(pageKey === 'settings'){
                 document.querySelector('#home').addEventListener('click', () => loadPage('home'))
                 document.querySelector('#graph').addEventListener('click', () => loadPage('graph'))
+                document.querySelector('#fontSizeSet').value = localStorage.getItem('fontSize')
             }
         })
         .catch(error => console.error('ページ読み込みエラー', error))
@@ -715,11 +719,12 @@ function loadLevelAndExp(){
 }
 
 //font settings
+
 //フォントを取り込んでローカルに保存する関数
 function saveFontSize(){
     let fontSize = document.getElementById('fontSizeSet').value;
 
-    localStorage.setItem('fontSize', fontSize)
+    localStorage.setItem('fontSize', fontSize);
 
     patchFontSize(fontSize);
 }
@@ -758,7 +763,7 @@ function patchFontSize(fontSizePatch){
             titlesize = '5dvh';
             descsize = '2.5dvh';
             break;
-        default:
+        default: //the default font-size is as same as the medium one
             titlesize = '3dvh';
             descsize = '1dvh';
             break;
@@ -766,6 +771,9 @@ function patchFontSize(fontSizePatch){
 
     if(title){
         title.style.fontSize = titlesize;
+    }
+
+    if(desc){
         desc.style.fontSize = descsize;
     }
 }
