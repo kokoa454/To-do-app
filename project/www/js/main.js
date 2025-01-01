@@ -238,6 +238,8 @@ function addTask(listName){
         let taskDate = null
         let taskDOW = null
         let taskTime = document.querySelector('#taskTime').value
+        let savedYearData = new Date().getFullYear()
+        let savedMonthData = new Date().getMonth()
         let savedDateData = new Date().getDate()
 
         if(taskTitle === ""){
@@ -245,7 +247,7 @@ function addTask(listName){
             return
         } else {
             addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime)
-            saveDailyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedDateData)
+            saveDailyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedYearData, savedMonthData, savedDateData)
             loadPage('dailyTasks')
         }
     } else if(listName === weeklyList){
@@ -253,38 +255,40 @@ function addTask(listName){
         let taskDesc = document.querySelector('#taskDesc').value
         let taskDate = null
         let taskDOW
-        let savedDOWDate
+        let savedDOWData
         switch(document.querySelector('#taskDOW').value){
             case 'monday':
                 taskDOW = '月'
-                savedDataDOW = 1
+                savedDOWData = 1
                 break
             case 'tuesday':
                 taskDOW = '火'
-                savedDataDOW = 2
+                savedDOWData = 2
                 break
             case 'wednesday':
                 taskDOW = '水'
-                savedDataDOW = 3
+                savedDOWData = 3
                 break
             case 'thursday':
                 taskDOW = '木'
-                savedDataDOW = 4
+                savedDOWData = 4
                 break
             case 'friday':
                 taskDOW = '金'
-                savedDataDOW = 5
+                savedDOWData = 5
                 break
             case 'saturday':
                 taskDOW = '土'
-                savedDataDOW = 6
+                savedDOWData = 6
                 break
             case 'sunday':
                 taskDOW = '日'
-                savedDataDOW = 0
+                savedDOWData = 0
                 break
         }
         let taskTime = document.querySelector('#taskTime').value
+        let savedYearData = new Date().getFullYear()
+        let savedMonthData = new Date().getMonth()
         let savedDateData = new Date().getDate()
 
         if(taskTitle === ""){
@@ -292,7 +296,7 @@ function addTask(listName){
             return
         } else {
             addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime)
-            saveDailyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedDOWDate, savedDateData)
+            saveDailyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedDOWData, savedYearData, savedMonthData, savedDateData)
             loadPage('weeklyTasks')
         }
     }
@@ -499,7 +503,8 @@ function showArchive(){
 function archiveTask(listName){
     let taskList = getStorage(listName)
     let archiveList = getStorage("archive")
-    let month = new Date().getMonth()
+    let currentYear = new Date().getFullYear()
+    let currentMonth = new Date().getMonth()
 
     document.querySelectorAll(".contentsBox input[type=checkbox]:checked").forEach(task => {
         let taskData = {
@@ -508,7 +513,8 @@ function archiveTask(listName){
             date: task.dataset.date,
             DOW: task.dataset.dow || task.dataset.DOW,
             time: task.dataset.time,
-            archivedMonth: month
+            archivedYear: currentYear,
+            archivedMonth: currentMonth
         }
 
         let taskIndex = taskList.findIndex(element =>
@@ -535,18 +541,27 @@ function archiveTask(listName){
     }
 }
 
-function deleteArchivedTask(){
+function deleteArchivedTask() {
     let archiveList = getStorage("archive")
-    let month = new Date().getMonth()
+    let currentYear = new Date().getFullYear()
+    let currentMonth = new Date().getMonth()
 
-    archiveList.forEach((task, index) => {
-        if(task.archivedMonth <= month - 4){
-            archiveList.splice(index, 1)
+    for (let i = archiveList.length - 1; i >= 0; i--) {
+        let task = archiveList[i]
+        let archivedYear = parseInt(task.archivedYear)
+        let archivedMonth = parseInt(task.archivedMonth)
+
+        let archivedDateValue = archivedYear * 12 + archivedMonth
+        let currentDateValue = currentYear * 12 + currentMonth
+
+        if (currentDateValue - archivedDateValue >= 5) {
+            archiveList.splice(i, 1)
         }
-    })
+    }
 
     setStorage("archive", archiveList)
 }
+
 
 //Level and Exp settings
 function countLevelAndExp(listName){
@@ -602,13 +617,16 @@ function setStorage(listName, taskList){
 function loadDailyList_cpy() {
     const storageList = getStorage("dailyList_cpy")
     if (storageList.length > 0) {
-        let currentDay = new Date().getDate()
+        let currentYear = new Date().getFullYear()
+        let currentMonth = new Date().getMonth()
+        let currentDate = new Date().getDate()
         let dailyTasks = getStorage("dailyList")
 
         let updatedTasks = dailyTasks.slice()
 
         storageList.forEach(storedTask => {
-            if (storedTask.savedDate !== currentDay) {
+            console.log(storedTask.savedDate)
+            if ((parseInt(storedTask.savedYear) === currentYear && parseInt(storedTask.savedMonth) === currentMonth && parseInt(storedTask.savedDate) !== currentDate) || (parseInt(storedTask.savedYear) === currentYear && parseInt(storedTask.savedMonth) !== currentMonth && parseInt(storedTask.savedDate) === currentDate) || parseInt(storedTask.savedYear) !== currentYear) {
                 let isTaskExisting = updatedTasks.some(
                     dailyTask => dailyTask.title === storedTask.title
                 )
@@ -637,8 +655,8 @@ function deleteDailyList_cpy(task) {
     }
 }
 
-function saveDailyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedDateData) {
-    let taskList = getStorage(dailyList_cpy) || []
+function saveDailyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedYearData, savedMonthData, savedDateData) {
+    let taskList = getStorage(dailyList_cpy)
     
     const existingTaskIndex = taskList.findIndex(task => task.title === taskTitle)
     if (existingTaskIndex !== -1) {
@@ -651,6 +669,8 @@ function saveDailyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, sav
         date: taskDate,
         DOW: taskDOW,
         time: taskTime,
+        savedYear: savedYearData,
+        savedMonth: savedMonthData,
         savedDate: savedDateData
     });
     
@@ -660,14 +680,16 @@ function saveDailyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, sav
 function loadWeeklyList_cpy() {
     const storageList = getStorage("weeklyList_cpy")
     if (storageList.length > 0) {
+        let currentYear = new Date().getFullYear()
+        let currentMonth = new Date().getMonth()
+        let currentDay = new Date().getDate()
         let currentDOW = new Date().getDay()
-        let currentDay = new Date()
         let weeklyTasks = getStorage("weeklyList")
 
         let updatedTasks = weeklyTasks.slice()
 
         storageList.forEach(storedTask => {
-            if (storedTask.savedDOW === currentDOW && storedTask.savedDate !== currentDay) {
+            if ((parseInt(storedTask.savedYear) === currentYear && parseInt(storedTask.savedMonth) === currentMonth && parseInt(storedTask.savedDate) !== currentDay && parseInt(storedTask.savedDOW) === currentDOW) || (parseInt(storedTask.savedYear) === currentYear && parseInt(storedTask.savedMonth) !== currentMonth &&parseInt(storedTask.savedDOW) === currentDOW) || (parseInt(storedTask.savedYear) !== currentYear && parseInt(storedTask.savedMonth) === currentMonth && parseInt(storedTask.savedDOW) === currentDOW)) {
                 let isTaskExisting = updatedTasks.some(
                     weeklyTask => weeklyTask.title === storedTask.title
                 )
@@ -696,7 +718,7 @@ function deleteWeeklyList_cpy(task) {
     }
 }
 
-function saveWeeklyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedDateData) {
+function saveWeeklyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedDOWData, savedYearData, savedMonthData, savedDateData) {
     let taskList = getStorage(weeklyList_cpy) || []
     
     const existingTaskIndex = taskList.findIndex(task => task.title === taskTitle)
@@ -710,6 +732,9 @@ function saveWeeklyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, sa
         date: taskDate,
         DOW: taskDOW,
         time: taskTime,
+        savedDOW: savedDOWData,
+        savedYear: savedYearData,
+        savedMonth: savedMonthData,
         savedDate: savedDateData
     });
     
