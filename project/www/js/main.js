@@ -115,7 +115,6 @@ function loadPage(pageKey){
             if(pageKey === 'settings'){
                 document.querySelector('#home').addEventListener('click', () => loadPage('home'))
                 document.querySelector('#graph').addEventListener('click', () => loadPage('graph'))
-                document.querySelector('#archive').addEventListener('click', () => loadPage('archive'))
             }
         })
         .catch(error => console.error('ページ読み込みエラー', error))
@@ -722,8 +721,6 @@ function saveFontSize(){
 
     localStorage.setItem('fontSize', fontSize)
 
-    console.log(fontSize);
-
     patchFontSize(fontSize);
 }
 
@@ -737,9 +734,7 @@ function loadFontSize(){
         fontSize = '1';
     }
 
-    console.log(fontSize);
     patchFontSize(fontSize);
-    
 }
 
 //フォントサイズを適用する関数
@@ -772,7 +767,5 @@ function patchFontSize(fontSizePatch){
     if(title){
         title.style.fontSize = titlesize;
         desc.style.fontSize = descsize;
-    }else {
-        console.log("タイトル読み込みエラー");
     }
 }
