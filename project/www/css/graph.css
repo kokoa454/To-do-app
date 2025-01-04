@@ -30,6 +30,7 @@ h2:nth-of-type(2){
 
 canvas{
     height: 23dvh !important;
+    width: 100% !important;
 }
 
 /* --footer-settings-- */

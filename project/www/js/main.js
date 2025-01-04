@@ -121,7 +121,7 @@ function loadPage(pageKey){
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 countArchivedTasks()
-                showEXPGraph()
+                showExpGraph()
             }
 
             if(pageKey === 'settings'){
@@ -596,6 +596,8 @@ function saveLevelAndExp(){
     localStorage.setItem('usrLevel', usrLevel)
     localStorage.setItem('valueInCurrentLevel', valueInCurrentLevel)
     localStorage.setItem('maxInCurrentLevel', maxInCurrentLevel)
+
+    saveExpHistory()
 }
 
 function loadLevelAndExp(){
@@ -862,14 +864,24 @@ function showArchievementGraph(currentMonthData, oneMonthAgoData, twoMonthAgoDat
                 data: [fiveMonthAgoData, fourMonthAgoData, threeMonthAgoData, twoMonthAgoData, oneMonthAgoData, currentMonthData],
                 label: 'label',
                 backgroundColor: [
-                    '#ff0000',
-                    '#0000ff',
-                    '#ffff00',
-                    '#008000',
-                    '#800080',
-                    '#ffa500',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 99, 132, 0.6)', 
                 ],
-                borderWidth: 1,
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 2,
+                borderRadius: 8,
+                maxBarThickness: 50 
             }]
         },
         plugins: [ChartDataLabels],
@@ -896,7 +908,6 @@ function showArchievementGraph(currentMonthData, oneMonthAgoData, twoMonthAgoDat
             },
             responsive: true,
             maintainAspectRatio: true,
-            beginAtZero: true,
             scales: {
                 x: {
                     grid: {
@@ -913,7 +924,11 @@ function showArchievementGraph(currentMonthData, oneMonthAgoData, twoMonthAgoDat
                 padding: {
                     top: 30
                 }
-            }
+            },
+            animation: {
+                duration: 1500,
+                easing: 'easeInOutQuart'
+            },
         }
     }
     let barChart = new Chart(barCtx, barConfig)
@@ -954,9 +969,10 @@ function countArchivedTasks(){
     showArchievementGraph(currentMonthData, oneMonthAgoData, twoMonthAgoData, threeMonthAgoData, fourMonthAgoData, fiveMonthAgoData)
 }
 
-function showEXPGraph(){
+function showExpGraph(){
     let lineCtx = document.getElementById("lineChart-exp").getContext('2d')
 
+    let currentYear = new Date().getFullYear()
     let currentMonth = new Date().getMonth() + 1
     let oneMonthAgo = currentMonth - 1
     let twoMonthAgo = currentMonth - 2
@@ -984,22 +1000,32 @@ function showEXPGraph(){
         fiveMonthAgo += 12
     }
 
+    let expHistory = getStorage("expHistory") || []
+
+    function getMonthValue(targetMonth, targetYear) {
+        const entry = expHistory.find(e => e.month === targetMonth && e.year === targetYear)
+        return entry ? entry.value : 0
+    }
+
+    let currentMonthData = getMonthValue(currentMonth, currentYear)
+    let oneMonthAgoData = getMonthValue(oneMonthAgo, oneMonthAgo < currentMonth ? currentYear : currentYear - 1)
+    let twoMonthAgoData = getMonthValue(twoMonthAgo, twoMonthAgo < currentMonth ? currentYear : currentYear - 1)
+    let threeMonthAgoData = getMonthValue(threeMonthAgo, threeMonthAgo < currentMonth ? currentYear : currentYear - 1)
+    let fourMonthAgoData = getMonthValue(fourMonthAgo, fourMonthAgo < currentMonth ? currentYear : currentYear - 1)
+    let fiveMonthAgoData = getMonthValue(fiveMonthAgo, fiveMonthAgo < currentMonth ? currentYear : currentYear - 1)
+
     let lineConfig = {
         type: 'line',
         data: {
             labels: [`${fiveMonthAgo}月`, `${fourMonthAgo}月`, `${threeMonthAgo}月`, `${twoMonthAgo}月`, `${oneMonthAgo}月`, `${currentMonth}月`],
             datasets: [{
-                data: [1, 2, 3 ,4, 5, valueInCurrentLevel],
-                label: 'label',
-                backgroundColor: [
-                    '#ff0000',
-                    '#0000ff',
-                    '#ffff00',
-                    '#008000',
-                    '#800080',
-                    '#ffa500',
-                ],
-                borderWidth: 1,
+                data: [fiveMonthAgoData, fourMonthAgoData, threeMonthAgoData, twoMonthAgoData, oneMonthAgoData, currentMonthData],
+                label: 'EXP',
+                borderColor: '#4CAF50',
+                backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
             }]
         },
         plugins: [ChartDataLabels],
@@ -1011,31 +1037,28 @@ function showEXPGraph(){
                 datalabels: {
                     display: true,
                     anchor: 'end',
-                    align: 'end',
-                    clamp: true,
+                    align: 'top',
+                    offset: 5,
                     font: {
                         weight: 'bold',
                         size: 14,
                     },
                     color: 'black',
-                    formatter: (value) => value
+                    formatter: (value) => Math.round(value)
                 },
                 tooltip: {
-                    enabled: false
+                    enabled: true,
+                    mode: 'index',
+                    intersect: false
                 }
             },
             responsive: true,
             maintainAspectRatio: true,
-            beginAtZero: true,
             scales: {
-                x: {
-                    grid: {
-                        display: false
-                    }
-                },
                 y: {
+                    beginAtZero: true,
                     ticks: {
-                        stepSize: 1
+                        stepSize: Math.ceil(Math.max(...[fiveMonthAgoData, fourMonthAgoData, threeMonthAgoData, twoMonthAgoData, oneMonthAgoData, currentMonthData]) / 5)
                     }
                 }
             },
@@ -1043,8 +1066,40 @@ function showEXPGraph(){
                 padding: {
                     top: 30
                 }
-            }
+            },
+            animation: {
+                duration: 1500,
+                easing: 'easeInOutQuart'
+            },
         }
     }
     let lineChart = new Chart(lineCtx, lineConfig)
+}
+
+function saveExpHistory(){
+    let currentYear = new Date().getFullYear()
+    let currentMonth = new Date().getMonth() + 1
+
+    let expHistory = getStorage("expHistory") || []
+    
+    const currentMonthIndex = expHistory.findIndex(element => 
+        element.month === currentMonth && element.year === currentYear
+    )
+
+    if(currentMonthIndex !== -1) {
+        expHistory[currentMonthIndex].value = valueInCurrentLevel
+    } else {
+        expHistory.push({
+            month: currentMonth,
+            year: currentYear,
+            value: valueInCurrentLevel
+        })
+    }
+
+    expHistory = expHistory.filter(element => {
+        const monthDifference = (currentYear - element.year) * 12 + (currentMonth - element.month)
+        return monthDifference <= 5
+    })
+
+    setStorage("expHistory", expHistory)
 }
