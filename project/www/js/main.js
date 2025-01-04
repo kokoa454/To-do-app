@@ -825,7 +825,7 @@ function patchFontSize(fontSizePatch){
 
 //graph settings
 function showArchievement(currentMonthData, oneMonthAgoData, twoMonthAgoData, threeMonthAgoData, fourMonthAgoData, fiveMonthAgoData){
-    let barCtx = document.getElementById("barChart-achievement").getContext('2d');
+    let barCtx = document.getElementById("barChart-achievement").getContext('2d')
     let currentMonth = new Date().getMonth() + 1
     let oneMonthAgo = currentMonth - 1
     let twoMonthAgo = currentMonth - 2
@@ -854,24 +854,67 @@ function showArchievement(currentMonthData, oneMonthAgoData, twoMonthAgoData, th
     }
 
     let barConfig = {
-    type: 'bar',
-    data: {
-        labels: [`${fiveMonthAgo}月`, `${fourMonthAgo}月`, `${threeMonthAgo}月`, `${twoMonthAgo}月`, `${oneMonthAgo}月`, `${currentMonth}月`],
-        datasets: [{
-        data: [`${fiveMonthAgoData}`, `${fourMonthAgoData}`, `${threeMonthAgoData}`, `${twoMonthAgoData}`, `${oneMonthAgoData}`, `${currentMonthData}`],
-        label: 'label',
-        backgroundColor: [
-            '#ff0000',
-            '#0000ff',
-            '#ffff00',
-            '#008000',
-            '#800080',
-            '#ffa500',
-        ],
-        borderWidth: 1,
-        }]
-    },
-    };
+        type: 'bar',
+        data: {
+            labels: [`${fiveMonthAgo}月`, `${fourMonthAgo}月`, `${threeMonthAgo}月`, `${twoMonthAgo}月`, `${oneMonthAgo}月`, `${currentMonth}月`],
+            datasets: [{
+                data: [fiveMonthAgoData, fourMonthAgoData, threeMonthAgoData, twoMonthAgoData, oneMonthAgoData, currentMonthData],
+                label: 'label',
+                backgroundColor: [
+                    '#ff0000',
+                    '#0000ff',
+                    '#ffff00',
+                    '#008000',
+                    '#800080',
+                    '#ffa500',
+                ],
+                borderWidth: 1,
+            }]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                },
+                datalabels: {
+                    display: true,
+                    anchor: 'end',
+                    align: 'end',
+                    clamp: true,
+                    font: {
+                        weight: 'bold',
+                        size: 14,
+                    },
+                    color: 'black',
+                    formatter: (value) => value
+                },
+                tooltip: {
+                    enabled: false
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: true,
+            beginAtZero: true,
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    top: 30
+                }
+            }
+        }
+    }
     let barChart = new Chart(barCtx, barConfig)
 }
 
