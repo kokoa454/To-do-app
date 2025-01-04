@@ -1008,6 +1008,18 @@ function showEXPGraph(){
                 legend: {
                     display: false
                 },
+                datalabels: {
+                    display: true,
+                    anchor: 'end',
+                    align: 'end',
+                    clamp: true,
+                    font: {
+                        weight: 'bold',
+                        size: 14,
+                    },
+                    color: 'black',
+                    formatter: (value) => value
+                },
                 tooltip: {
                     enabled: false
                 }
@@ -1019,6 +1031,11 @@ function showEXPGraph(){
                 x: {
                     grid: {
                         display: false
+                    }
+                },
+                y: {
+                    ticks: {
+                        stepSize: 1
                     }
                 }
             },
