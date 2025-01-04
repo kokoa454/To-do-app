@@ -558,7 +558,7 @@ function deleteArchivedTask() {
         let archivedDateValue = archivedYear * 12 + archivedMonth
         let currentDateValue = currentYear * 12 + currentMonth
 
-        if (currentDateValue - archivedDateValue >= 5) {
+        if (currentDateValue - archivedDateValue >= 11) {
             archiveList.splice(i, 1)
         }
     }
