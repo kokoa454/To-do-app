@@ -121,6 +121,7 @@ function loadPage(pageKey){
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
 
                 countArchivedTasks()
+                showEXPGraph()
             }
 
             if(pageKey === 'settings'){
@@ -591,6 +592,30 @@ function countLevelAndExp(listName){
     saveLevelAndExp()
 }
 
+function saveLevelAndExp(){
+    localStorage.setItem('usrLevel', usrLevel)
+    localStorage.setItem('valueInCurrentLevel', valueInCurrentLevel)
+    localStorage.setItem('maxInCurrentLevel', maxInCurrentLevel)
+}
+
+function loadLevelAndExp(){
+    usrLevel = JSON.parse(localStorage.getItem('usrLevel'))
+    valueInCurrentLevel = JSON.parse(localStorage.getItem('valueInCurrentLevel'))
+    maxInCurrentLevel = JSON.parse(localStorage.getItem('maxInCurrentLevel'))
+
+    if(usrLevel === null || valueInCurrentLevel === null || maxInCurrentLevel === null){
+        usrLevel = 1
+        maxInCurrentLevel = 10
+        valueInCurrentLevel = 0
+    }
+
+    toTheNextLevel = maxInCurrentLevel - valueInCurrentLevel
+    document.querySelector('#levelCnt').textContent = toTheNextLevel
+    document.querySelector('#levelProgressbar').value = valueInCurrentLevel
+    document.querySelector('#levelProgressbar').max = maxInCurrentLevel
+    document.querySelector('#levelNum').textContent = usrLevel
+}
+
 //local-storage settings
 function getStorage(listName){
     let storageList = localStorage.getItem(listName)
@@ -744,30 +769,6 @@ function saveWeeklyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, sa
     setStorage(weeklyList_cpy, taskList)
 }
 
-function saveLevelAndExp(){
-    localStorage.setItem('usrLevel', usrLevel)
-    localStorage.setItem('valueInCurrentLevel', valueInCurrentLevel)
-    localStorage.setItem('maxInCurrentLevel', maxInCurrentLevel)
-}
-
-function loadLevelAndExp(){
-    usrLevel = JSON.parse(localStorage.getItem('usrLevel'))
-    valueInCurrentLevel = JSON.parse(localStorage.getItem('valueInCurrentLevel'))
-    maxInCurrentLevel = JSON.parse(localStorage.getItem('maxInCurrentLevel'))
-
-    if(usrLevel === null || valueInCurrentLevel === null || maxInCurrentLevel === null){
-        usrLevel = 1
-        maxInCurrentLevel = 10
-        valueInCurrentLevel = 0
-    }
-
-    toTheNextLevel = maxInCurrentLevel - valueInCurrentLevel
-    document.querySelector('#levelCnt').textContent = toTheNextLevel
-    document.querySelector('#levelProgressbar').value = valueInCurrentLevel
-    document.querySelector('#levelProgressbar').max = maxInCurrentLevel
-    document.querySelector('#levelNum').textContent = usrLevel
-}
-
 //font settings
 //フォントを取り込んでローカルに保存する関数
 function saveFontSize(){
@@ -824,7 +825,7 @@ function patchFontSize(fontSizePatch){
 }
 
 //graph settings
-function showArchievement(currentMonthData, oneMonthAgoData, twoMonthAgoData, threeMonthAgoData, fourMonthAgoData, fiveMonthAgoData){
+function showArchievementGraph(currentMonthData, oneMonthAgoData, twoMonthAgoData, threeMonthAgoData, fourMonthAgoData, fiveMonthAgoData){
     let barCtx = document.getElementById("barChart-achievement").getContext('2d')
     let currentMonth = new Date().getMonth() + 1
     let oneMonthAgo = currentMonth - 1
@@ -919,7 +920,8 @@ function showArchievement(currentMonthData, oneMonthAgoData, twoMonthAgoData, th
 }
 
 function countArchivedTasks(){
-    let archiveList = getStorage("archive")
+    let archiveList = getStorage("archive") || []
+    let currentYear = new Date().getFullYear()
     let currentMonth = new Date().getMonth() + 1
     
     let currentMonthData = 0
@@ -929,21 +931,103 @@ function countArchivedTasks(){
     let fourMonthAgoData = 0
     let fiveMonthAgoData = 0
 
-    for(let i = 0; i < archiveList.length; i++){
-        if(archiveList[i].archivedMonth === currentMonth){
-            currentMonthData++
-        } else if(archiveList[i].archivedMonth === currentMonth - 1){
-            oneMonthAgoData++
-        } else if(archiveList[i].archivedMonth === currentMonth - 2){
-            twoMonthAgoData++
-        } else if(archiveList[i].archivedMonth === currentMonth - 3){
-            threeMonthAgoData++
-        } else if(archiveList[i].archivedMonth === currentMonth - 4){
-            fourMonthAgoData++
-        } else if(archiveList[i].archivedMonth === currentMonth - 5){
-            fiveMonthAgoData++
+    if(archiveList.length > 0){
+        for(let i = 0; i < archiveList.length; i++){
+            monthDifference = (currentYear - archiveList[i].archivedYear) * 12 + (currentMonth - archiveList[i].archivedMonth)
+
+            if(monthDifference === 0){
+                currentMonthData++
+            } else if(monthDifference === 1){
+                oneMonthAgoData++
+            } else if(monthDifference === 2){
+                twoMonthAgoData++
+            } else if(monthDifference === 3){
+                threeMonthAgoData++
+            } else if(monthDifference === 4){
+                fourMonthAgoData++
+            } else if(monthDifference === 5){
+                fiveMonthAgoData++
+            }
         }
     }
 
-    showArchievement(currentMonthData, oneMonthAgoData, twoMonthAgoData, threeMonthAgoData, fourMonthAgoData, fiveMonthAgoData)
+    showArchievementGraph(currentMonthData, oneMonthAgoData, twoMonthAgoData, threeMonthAgoData, fourMonthAgoData, fiveMonthAgoData)
+}
+
+function showEXPGraph(){
+    let lineCtx = document.getElementById("lineChart-exp").getContext('2d')
+
+    let currentMonth = new Date().getMonth() + 1
+    let oneMonthAgo = currentMonth - 1
+    let twoMonthAgo = currentMonth - 2
+    let threeMonthAgo = currentMonth - 3
+    let fourMonthAgo = currentMonth - 4
+    let fiveMonthAgo = currentMonth - 5
+
+    if(oneMonthAgo < 1){
+        oneMonthAgo += 12
+    }
+
+    if(twoMonthAgo < 1){
+        twoMonthAgo += 12
+    }
+
+    if(threeMonthAgo < 1){
+        threeMonthAgo += 12
+    }
+
+    if(fourMonthAgo < 1){
+        fourMonthAgo += 12
+    }
+
+    if(fiveMonthAgo < 1){
+        fiveMonthAgo += 12
+    }
+
+    let lineConfig = {
+        type: 'line',
+        data: {
+            labels: [`${fiveMonthAgo}月`, `${fourMonthAgo}月`, `${threeMonthAgo}月`, `${twoMonthAgo}月`, `${oneMonthAgo}月`, `${currentMonth}月`],
+            datasets: [{
+                data: [1, 2, 3 ,4, 5, valueInCurrentLevel],
+                label: 'label',
+                backgroundColor: [
+                    '#ff0000',
+                    '#0000ff',
+                    '#ffff00',
+                    '#008000',
+                    '#800080',
+                    '#ffa500',
+                ],
+                borderWidth: 1,
+            }]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: true,
+            beginAtZero: true,
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    top: 30
+                }
+            }
+        }
+    }
+    let lineChart = new Chart(lineCtx, lineConfig)
 }
