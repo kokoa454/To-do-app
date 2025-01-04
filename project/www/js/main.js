@@ -119,6 +119,8 @@ function loadPage(pageKey){
             if(pageKey === 'graph'){
                 document.querySelector('#home').addEventListener('click', () => loadPage('home'))
                 document.querySelector('#settings').addEventListener('click', () => loadPage('settings'))
+
+                countArchivedTasks()
             }
 
             if(pageKey === 'settings'){
@@ -239,7 +241,7 @@ function addTask(listName){
         let taskDOW = null
         let taskTime = document.querySelector('#taskTime').value
         let savedYearData = new Date().getFullYear()
-        let savedMonthData = new Date().getMonth()
+        let savedMonthData = new Date().getMonth() + 1
         let savedDateData = new Date().getDate()
 
         if(taskTitle === ""){
@@ -288,7 +290,7 @@ function addTask(listName){
         }
         let taskTime = document.querySelector('#taskTime').value
         let savedYearData = new Date().getFullYear()
-        let savedMonthData = new Date().getMonth()
+        let savedMonthData = new Date().getMonth() + 1
         let savedDateData = new Date().getDate()
 
         if(taskTitle === ""){
@@ -501,10 +503,11 @@ function showArchive(){
 }
 
 function archiveTask(listName){
+
     let taskList = getStorage(listName)
     let archiveList = getStorage("archive")
     let currentYear = new Date().getFullYear()
-    let currentMonth = new Date().getMonth()
+    let currentMonth = new Date().getMonth() + 1
 
     document.querySelectorAll(".contentsBox input[type=checkbox]:checked").forEach(task => {
         let taskData = {
@@ -544,7 +547,7 @@ function archiveTask(listName){
 function deleteArchivedTask() {
     let archiveList = getStorage("archive")
     let currentYear = new Date().getFullYear()
-    let currentMonth = new Date().getMonth()
+    let currentMonth = new Date().getMonth() + 1
 
     for (let i = archiveList.length - 1; i >= 0; i--) {
         let task = archiveList[i]
@@ -618,7 +621,7 @@ function loadDailyList_cpy() {
     const storageList = getStorage("dailyList_cpy")
     if (storageList.length > 0) {
         let currentYear = new Date().getFullYear()
-        let currentMonth = new Date().getMonth()
+        let currentMonth = new Date().getMonth() + 1
         let currentDate = new Date().getDate()
         let dailyTasks = getStorage("dailyList")
 
@@ -681,7 +684,7 @@ function loadWeeklyList_cpy() {
     const storageList = getStorage("weeklyList_cpy")
     if (storageList.length > 0) {
         let currentYear = new Date().getFullYear()
-        let currentMonth = new Date().getMonth()
+        let currentMonth = new Date().getMonth() + 1
         let currentDay = new Date().getDate()
         let currentDOW = new Date().getDay()
         let weeklyTasks = getStorage("weeklyList")
@@ -821,3 +824,83 @@ function patchFontSize(fontSizePatch){
 }
 
 //graph settings
+function showArchievement(currentMonthData, oneMonthAgoData, twoMonthAgoData, threeMonthAgoData, fourMonthAgoData, fiveMonthAgoData){
+    let barCtx = document.getElementById("barChart-achievement").getContext('2d');
+    let currentMonth = new Date().getMonth() + 1
+    let oneMonthAgo = currentMonth - 1
+    let twoMonthAgo = currentMonth - 2
+    let threeMonthAgo = currentMonth - 3
+    let fourMonthAgo = currentMonth - 4
+    let fiveMonthAgo = currentMonth - 5
+
+    if(oneMonthAgo < 1){
+        oneMonthAgo += 12
+    }
+
+    if(twoMonthAgo < 1){
+        twoMonthAgo += 12
+    }
+
+    if(threeMonthAgo < 1){
+        threeMonthAgo += 12
+    }
+
+    if(fourMonthAgo < 1){
+        fourMonthAgo += 12
+    }
+
+    if(fiveMonthAgo < 1){
+        fiveMonthAgo += 12
+    }
+
+    let barConfig = {
+    type: 'bar',
+    data: {
+        labels: [`${fiveMonthAgo}月`, `${fourMonthAgo}月`, `${threeMonthAgo}月`, `${twoMonthAgo}月`, `${oneMonthAgo}月`, `${currentMonth}月`],
+        datasets: [{
+        data: [`${fiveMonthAgoData}`, `${fourMonthAgoData}`, `${threeMonthAgoData}`, `${twoMonthAgoData}`, `${oneMonthAgoData}`, `${currentMonthData}`],
+        label: 'label',
+        backgroundColor: [
+            '#ff0000',
+            '#0000ff',
+            '#ffff00',
+            '#008000',
+            '#800080',
+            '#ffa500',
+        ],
+        borderWidth: 1,
+        }]
+    },
+    };
+    let barChart = new Chart(barCtx, barConfig)
+}
+
+function countArchivedTasks(){
+    let archiveList = getStorage("archive")
+    let currentMonth = new Date().getMonth() + 1
+    
+    let currentMonthData = 0
+    let oneMonthAgoData = 0
+    let twoMonthAgoData = 0
+    let threeMonthAgoData = 0
+    let fourMonthAgoData = 0
+    let fiveMonthAgoData = 0
+
+    for(let i = 0; i < archiveList.length; i++){
+        if(archiveList[i].archivedMonth === currentMonth){
+            currentMonthData++
+        } else if(archiveList[i].archivedMonth === currentMonth - 1){
+            oneMonthAgoData++
+        } else if(archiveList[i].archivedMonth === currentMonth - 2){
+            twoMonthAgoData++
+        } else if(archiveList[i].archivedMonth === currentMonth - 3){
+            threeMonthAgoData++
+        } else if(archiveList[i].archivedMonth === currentMonth - 4){
+            fourMonthAgoData++
+        } else if(archiveList[i].archivedMonth === currentMonth - 5){
+            fiveMonthAgoData++
+        }
+    }
+
+    showArchievement(currentMonthData, oneMonthAgoData, twoMonthAgoData, threeMonthAgoData, fourMonthAgoData, fiveMonthAgoData)
+}
