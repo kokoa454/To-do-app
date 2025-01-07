@@ -503,13 +503,12 @@ function showArchive(){
     });
 }
 
-function archiveTask(listName){
-
+function archiveTask(listName) {
     let taskList = getStorage(listName)
     let archiveList = getStorage("archive")
     let currentYear = new Date().getFullYear()
     let currentMonth = new Date().getMonth() + 1
-
+    
     document.querySelectorAll(".contentsBox input[type=checkbox]:checked").forEach(task => {
         let taskData = {
             title: task.dataset.title,
@@ -520,27 +519,28 @@ function archiveTask(listName){
             archivedYear: currentYear,
             archivedMonth: currentMonth
         }
-
+        
         let taskIndex = taskList.findIndex(element =>
             element.title === taskData.title
         )
-
-        if(taskIndex !== -1){
+        
+        if (taskIndex !== -1) {
             taskList.splice(taskIndex, 1)
         }
-
+        
         archiveList.push(taskData)
         countLevelAndExp(listName)
+        saveExpHistory()
     })
 
     setStorage(listName, taskList)
     setStorage("archive", archiveList)
-
-    if(listName === reminderList){
+    
+    if (listName === reminderList) {
         loadPage("reminder")
-    } else if(listName === dailyList){
+    } else if (listName === dailyList) {
         loadPage("dailyTasks")
-    } else if(listName === weeklyList){
+    } else if (listName === weeklyList) {
         loadPage("weeklyTasks")
     }
 }
@@ -565,6 +565,7 @@ function deleteArchivedTask() {
 
     setStorage("archive", archiveList)
 }
+
 
 
 //Level and Exp settings
@@ -779,6 +780,7 @@ function saveFontSize(){
     localStorage.setItem('fontSize', fontSize);
 
     patchFontSize(fontSize);
+    resetData()
 }
 
 //ページ読み込み時にローカルストレージからフォントサイズを読み込む関数
@@ -969,57 +971,44 @@ function countArchivedTasks(){
     showArchievementGraph(currentMonthData, oneMonthAgoData, twoMonthAgoData, threeMonthAgoData, fourMonthAgoData, fiveMonthAgoData)
 }
 
-function showExpGraph(){
+function showExpGraph() {
     let lineCtx = document.getElementById("lineChart-exp").getContext('2d')
-
+    
     let currentYear = new Date().getFullYear()
     let currentMonth = new Date().getMonth() + 1
-    let oneMonthAgo = currentMonth - 1
-    let twoMonthAgo = currentMonth - 2
-    let threeMonthAgo = currentMonth - 3
-    let fourMonthAgo = currentMonth - 4
-    let fiveMonthAgo = currentMonth - 5
-
-    if(oneMonthAgo < 1){
-        oneMonthAgo += 12
+    
+    function calculatePastMonth(monthsAgo) {
+        let targetMonth = currentMonth - monthsAgo
+        let targetYear = currentYear
+        if (targetMonth <= 0) {
+            targetMonth += 12;
+            targetYear -= 1;
+        }
+        return { month: targetMonth, year: targetYear }
     }
 
-    if(twoMonthAgo < 1){
-        twoMonthAgo += 12
-    }
-
-    if(threeMonthAgo < 1){
-        threeMonthAgo += 12
-    }
-
-    if(fourMonthAgo < 1){
-        fourMonthAgo += 12
-    }
-
-    if(fiveMonthAgo < 1){
-        fiveMonthAgo += 12
-    }
-
-    let expHistory = getStorage("expHistory") || []
-
-    function getMonthValue(targetMonth, targetYear) {
-        const entry = expHistory.find(e => e.month === targetMonth && e.year === targetYear)
+        function getMonthlyExp(monthsAgo) {
+        let { month, year } = calculatePastMonth(monthsAgo)
+        let expHistory = getStorage("expHistory") || []
+        let entry = expHistory.find(e => e.month === month && e.year === year)
         return entry ? entry.value : 0
     }
-
-    let currentMonthData = getMonthValue(currentMonth, currentYear)
-    let oneMonthAgoData = getMonthValue(oneMonthAgo, oneMonthAgo < currentMonth ? currentYear : currentYear - 1)
-    let twoMonthAgoData = getMonthValue(twoMonthAgo, twoMonthAgo < currentMonth ? currentYear : currentYear - 1)
-    let threeMonthAgoData = getMonthValue(threeMonthAgo, threeMonthAgo < currentMonth ? currentYear : currentYear - 1)
-    let fourMonthAgoData = getMonthValue(fourMonthAgo, fourMonthAgo < currentMonth ? currentYear : currentYear - 1)
-    let fiveMonthAgoData = getMonthValue(fiveMonthAgo, fiveMonthAgo < currentMonth ? currentYear : currentYear - 1)
-
+    
+    let monthlyData = []
+    let labels = []
+    
+    for (let i = 5; i >= 0; i--) {
+        let { month } = calculatePastMonth(i)
+        monthlyData.push(getMonthlyExp(i))
+        labels.push(`${month}月`)
+    }
+    
     let lineConfig = {
         type: 'line',
         data: {
-            labels: [`${fiveMonthAgo}月`, `${fourMonthAgo}月`, `${threeMonthAgo}月`, `${twoMonthAgo}月`, `${oneMonthAgo}月`, `${currentMonth}月`],
+            labels: labels,
             datasets: [{
-                data: [fiveMonthAgoData, fourMonthAgoData, threeMonthAgoData, twoMonthAgoData, oneMonthAgoData, currentMonthData],
+                data: monthlyData,
                 label: 'EXP',
                 borderColor: '#4CAF50',
                 backgroundColor: 'rgba(76, 175, 80, 0.1)',
@@ -1058,7 +1047,7 @@ function showExpGraph(){
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        stepSize: Math.ceil(Math.max(...[fiveMonthAgoData, fourMonthAgoData, threeMonthAgoData, twoMonthAgoData, oneMonthAgoData, currentMonthData]) / 5)
+                        stepSize: Math.ceil(Math.max(...monthlyData) / 5)
                     }
                 }
             },
@@ -1073,21 +1062,20 @@ function showExpGraph(){
             },
         }
     }
-    let lineChart = new Chart(lineCtx, lineConfig)
+    new Chart(lineCtx, lineConfig)
 }
 
-function saveExpHistory(){
+function saveExpHistory() {
     let currentYear = new Date().getFullYear()
     let currentMonth = new Date().getMonth() + 1
-
     let expHistory = getStorage("expHistory") || []
     
-    const currentMonthIndex = expHistory.findIndex(element => 
-        element.month === currentMonth && element.year === currentYear
+    let currentEntry = expHistory.find(e => 
+        e.month === currentMonth && e.year === currentYear
     )
-
-    if(currentMonthIndex !== -1) {
-        expHistory[currentMonthIndex].value = valueInCurrentLevel
+    
+    if (currentEntry) {
+        currentEntry.value = valueInCurrentLevel
     } else {
         expHistory.push({
             month: currentMonth,
@@ -1095,11 +1083,18 @@ function saveExpHistory(){
             value: valueInCurrentLevel
         })
     }
-
-    expHistory = expHistory.filter(element => {
-        const monthDifference = (currentYear - element.year) * 12 + (currentMonth - element.month)
-        return monthDifference <= 5
-    })
-
+    
+    expHistory = expHistory.filter(entry => {
+        let monthDiff = (currentYear - entry.year) * 12 + (currentMonth - entry.month)
+        return monthDiff <= 5
+    });
+    
     setStorage("expHistory", expHistory)
+}
+
+function resetData(){
+    if(document.querySelector("#reset").checked === true){
+        localStorage.clear()
+        location.reload()
+    }
 }

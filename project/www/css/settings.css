@@ -67,6 +67,19 @@ input{
     font-family: "Loli-pop",sans-serif;
 }
 
+#reset-content{
+    margin-top: 10dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2dvh;
+}
+
+#reset{
+    height: 3dvh;
+    width: 3dvh;
+}
+
 /* --footer-settings-- */
 #settings{
     color: black;
