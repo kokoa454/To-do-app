@@ -591,6 +591,7 @@ function countLevelAndExp(listName){
     document.querySelector('#levelNum').textContent = usrLevel
 
     saveLevelAndExp()
+    checkIcon()
 }
 
 function saveLevelAndExp(){
@@ -617,6 +618,22 @@ function loadLevelAndExp(){
     document.querySelector('#levelProgressbar').value = valueInCurrentLevel
     document.querySelector('#levelProgressbar').max = maxInCurrentLevel
     document.querySelector('#levelNum').textContent = usrLevel
+
+    checkIcon()
+}
+
+function checkIcon(){
+    usrLevel = JSON.parse(localStorage.getItem('usrLevel'))
+
+    if(usrLevel >= 30){
+        document.querySelector("#characterIcon").src = "./img/characterIcon/Lv30.png"
+    } else if(usrLevel >= 20){
+        document.querySelector("#characterIcon").src = "./img/characterIcon/Lv20.png"
+    } else if(usrLevel >= 10){
+        document.querySelector("#characterIcon").src = "./img/characterIcon/Lv10.png"
+    } else {
+        document.querySelector("#characterIcon").src = "./img/characterIcon/Lv1.png"
+    }
 }
 
 //local-storage settings
