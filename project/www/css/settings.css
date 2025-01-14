@@ -13,14 +13,14 @@ h1 {
     font-size: 4dvh;
     font-family: "Loli-pop",sans-serif;
     color: white;
-    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-width: 2px;
     -webkit-text-stroke-color: black;
 }
 
 h2 {
     font-family: "Loli-pop",sans-serif;
     color: white;
-    -webkit-text-stroke-width: 3px;
+    -webkit-text-stroke-width: 2px;
     -webkit-text-stroke-color: black;
 }
 
@@ -55,7 +55,7 @@ p {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: black;
 }
 

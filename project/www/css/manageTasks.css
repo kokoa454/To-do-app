@@ -45,7 +45,7 @@ h1 {
 }
 
 .content{
-    height: 15dvh;
+    height: 20dvh;
     width: 70dvw;
     background-color: rgb(255, 255, 255);
     padding: 2dvh;
@@ -83,7 +83,7 @@ h1 {
     font-size: 1.5dvh;
     position: absolute;
     bottom: 2dvh;
-    right: 10dvh;
+    right: 15dvh;
     pointer-events: none;
 }
 

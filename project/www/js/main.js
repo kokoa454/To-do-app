@@ -820,15 +820,15 @@ function patchFontSize(fontSizePatch){
 
     switch(fontSizePatch) {
         case '0' :
-            titlesize = '2.5dvh';
-            descsize = '0.8dvh';
+            titlesize = '3dvh';
+            descsize = '1.5dvh';
             break;
         case '1' :
-            titlesize = '3dvh';
-            descsize = '1dvh';
+            titlesize = '3.5dvh';
+            descsize = '2dvh';
             break;
         case '2' :
-            titlesize = '5dvh';
+            titlesize = '4dvh';
             descsize = '2.5dvh';
             break;
     }
