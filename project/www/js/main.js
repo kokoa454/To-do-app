@@ -90,7 +90,6 @@ function loadPage(pageKey){
 
                 showTasks(weeklyList)
                 loadWeeklyList_cpy()
-                console.log(getStorage(weeklyList_cpy))
                 loadFontSize()
             }
 
