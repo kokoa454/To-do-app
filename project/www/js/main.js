@@ -90,6 +90,7 @@ function loadPage(pageKey){
 
                 showTasks(weeklyList)
                 loadWeeklyList_cpy()
+                console.log(getStorage(weeklyList_cpy))
                 loadFontSize()
             }
 
@@ -299,7 +300,7 @@ function addTask(listName){
             return
         } else {
             addStorage(listName, taskTitle, taskDesc, taskDate, taskDOW, taskTime)
-            saveDailyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedDOWData, savedYearData, savedMonthData, savedDateData)
+            saveWeeklyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedDOWData, savedYearData, savedMonthData, savedDateData)
             loadPage('weeklyTasks')
         }
     }
@@ -456,6 +457,7 @@ function editTask(listName, index){
             })
 
             document.querySelector('#deleteButton').addEventListener('click', () => {
+                deleteWeeklyList_cpy(taskList)
                 taskList.splice(index, 1)
                 setStorage(listName, taskList)
                 loadPage('weeklyTasks')
@@ -673,7 +675,6 @@ function loadDailyList_cpy() {
         let updatedTasks = dailyTasks.slice()
 
         storageList.forEach(storedTask => {
-            console.log(storedTask.savedDate)
             if ((parseInt(storedTask.savedYear) === currentYear && parseInt(storedTask.savedMonth) === currentMonth && parseInt(storedTask.savedDate) !== currentDate) || (parseInt(storedTask.savedYear) === currentYear && parseInt(storedTask.savedMonth) !== currentMonth && parseInt(storedTask.savedDate) === currentDate) || parseInt(storedTask.savedYear) !== currentYear) {
                 let isTaskExisting = updatedTasks.some(
                     dailyTask => dailyTask.title === storedTask.title
@@ -767,7 +768,7 @@ function deleteWeeklyList_cpy(task) {
 }
 
 function saveWeeklyList_cpy(taskTitle, taskDesc, taskDate, taskDOW, taskTime, savedDOWData, savedYearData, savedMonthData, savedDateData) {
-    let taskList = getStorage(weeklyList_cpy) || []
+    let taskList = getStorage(weeklyList_cpy)
     
     const existingTaskIndex = taskList.findIndex(task => task.title === taskTitle)
     if (existingTaskIndex !== -1) {

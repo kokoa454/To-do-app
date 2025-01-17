@@ -29,8 +29,12 @@ h2:nth-of-type(2){
 }
 
 canvas{
-    height: 23dvh !important;
-    width: 100% !important;
+    height: 23dvh;
+    width: 100%;
+}
+
+#lineChart-exp{
+    margin-bottom: 10dvh;
 }
 
 /* --footer-settings-- */
